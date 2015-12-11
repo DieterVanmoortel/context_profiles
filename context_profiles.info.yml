@@ -1,0 +1,9 @@
+name: Context Profiles
+type: module
+description: 'Context Organized by profile'
+core: 8.x
+package: Layout
+dependencies:
+- context
+
+configure: context_profile.settings

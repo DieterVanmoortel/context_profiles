@@ -1,0 +1,44 @@
+
+context_profiles.settings:
+  path: '/admin/context_profiles'
+  defaults:
+    _controller: '\Drupal\context_profiles\Controller\AdminController::settings'
+    _title: 'Context Profiles Settings'
+  requirements:
+    _permission: 'administer context profiles'
+
+# Link contexts to a profile
+context_profiles.manage:
+  path: '/admin/context_profiles/manage'
+  defaults:
+    _controller: '\Drupal\context_profiles\Controller\AdminController::manage'
+    _title: 'Manage Contexts'
+  requirements:
+    _permission: 'administer context profiles'
+
+# Add new profile
+context_profiles.add_profile:
+  path: '/admin/context_profiles/add'
+  defaults:
+    _controller: '\Drupal\context_profiles\Controller\AdminController::add'
+    _title: 'Add Context Profile'
+  requirements:
+    _permission: 'administer context profiles'
+
+# Edit existing profile
+context_profiles.edit_profile:
+  path: '/admin/context_profiles/edit/{id}'
+  defaults:
+    _controller: '\Drupal\context_profiles\Controller\AdminController::add'
+    _title: 'Edit Context Profile'
+  requirements:
+    _permission: 'administer context profiles'
+
+# User Interface for context
+context_profiles.context_ui:
+  path: '/admin/context_profiles/context/{id}'
+  defaults:
+    _controller: '\Drupal\context_profiles\Controller\ContextController::edit'
+    _title: 'Edit Context'
+  requirements:
+    _permission: 'use context profile ui'

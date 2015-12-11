@@ -1,0 +1,14 @@
+{
+  "name": "drupal/context_profiles",
+  "description": "A Context Organizer",
+  "type": "drupal-module",
+  "license": "GPL-2.0+",
+  "keywords": ["php", "layout"],
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Dieter Vanmoortel"
+    },
+  ],
+  "require": { }
+}

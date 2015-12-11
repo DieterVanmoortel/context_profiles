@@ -1,0 +1,7 @@
+'administer context profiles':
+  title: Administer context profiles
+  description: Allow users to create and edit context profiles
+
+'use context profile ui':
+  title: Access the context profile ui
+  description: Allow users to acces the context profile ui

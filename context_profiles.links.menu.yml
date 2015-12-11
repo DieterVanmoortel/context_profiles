@@ -1,0 +1,6 @@
+context_profiles.settings:
+  title: 'Context Profiles'
+  description: 'Administer Context Profiles'
+  parent: system.admin_structure
+  route_name: context_profiles.settings
+  weight: 100
