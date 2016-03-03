@@ -1,0 +1,28 @@
+#edit-regions, #edit-disabled {
+    width: 30%;
+    margin: 10px;
+    display: inline-block;
+    float: left;
+}
+
+#edit-regions fieldset {
+    background-color: white;
+}
+
+#edit-regions .region-droppable{
+    padding: 25px;
+    background-color: #e8e8e8;
+}
+
+.form-item.ui-draggable {
+    padding: 8px;
+    margin: 4px;
+    width: 200px;
+    display: inline-block;
+    background-color: #5ad2fa;
+    border-radius: 2px;
+}
+
+.form-item.ui-draggable input{
+    display:none;
+}

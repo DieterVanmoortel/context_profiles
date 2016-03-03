@@ -1,44 +1,42 @@
 
 context_profiles.settings:
-  path: '/admin/context_profiles'
+  path: '/admin/structure/context/profiles'
   defaults:
-    _controller: '\Drupal\context_profiles\Controller\AdminController::settings'
+    _controller: '\Drupal\system\Controller\SystemController::overview'
+    link_id: 'entity.context.collection'
     _title: 'Context Profiles Settings'
   requirements:
     _permission: 'administer context profiles'
+  options:
+    _admin_route: TRUE
 
-# Link contexts to a profile
-context_profiles.manage:
-  path: '/admin/context_profiles/manage'
+context_profiles.settings.regions:
+  path: '/admin/structure/context/profiles/regions'
   defaults:
-    _controller: '\Drupal\context_profiles\Controller\AdminController::manage'
-    _title: 'Manage Contexts'
+    _form: '\Drupal\context_profiles\Form\RegionConfigForm'
+    _title: 'Regions'
   requirements:
     _permission: 'administer context profiles'
+  options:
+    _admin_route: TRUE
 
-# Add new profile
-context_profiles.add_profile:
-  path: '/admin/context_profiles/add'
+context_profiles.settings.blocks:
+  path: '/admin/structure/context/profiles/blocks'
   defaults:
-    _controller: '\Drupal\context_profiles\Controller\AdminController::add'
-    _title: 'Add Context Profile'
+    _form: '\Drupal\context_profiles\Form\BlockConfigForm'
+    _title: 'Blocks'
   requirements:
     _permission: 'administer context profiles'
+  options:
+    _admin_route: TRUE
 
-# Edit existing profile
-context_profiles.edit_profile:
-  path: '/admin/context_profiles/edit/{id}'
+context_profiles.node.blocks_form:
+  path: '/node/{node}/blocks'
   defaults:
-    _controller: '\Drupal\context_profiles\Controller\AdminController::add'
-    _title: 'Edit Context Profile'
+    _form: '\Drupal\context_profiles\Form\BlockLayoutForm'
+    _title: 'Blocks'
   requirements:
     _permission: 'administer context profiles'
-
-# User Interface for context
-context_profiles.context_ui:
-  path: '/admin/context_profiles/context/{id}'
-  defaults:
-    _controller: '\Drupal\context_profiles\Controller\ContextController::edit'
-    _title: 'Edit Context'
-  requirements:
-    _permission: 'use context profile ui'
+    node: \d+
+  options:
+    _admin_route: TRUE

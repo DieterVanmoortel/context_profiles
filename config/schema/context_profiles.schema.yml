@@ -1,0 +1,19 @@
+context_profiles.settings:
+  type: config_object
+  label: 'Context Profiles settings'
+  mapping:
+    roles_regions:
+      type: mapping
+      label: 'Role based configuration for regions'
+    roles_blocks:
+      type: mapping
+      label: 'Role based configuration for blocks'
+
+
+#context_profiles.*:
+#  type: config_object
+#  label: 'Context Profiles Node Layout'
+#  mapping:
+#    enabled_blocks:
+#      type: mapping
+#      label: 'Enabled blocks'

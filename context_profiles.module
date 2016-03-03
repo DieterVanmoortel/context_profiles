@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_preprocess_page
+ *
+ * @param $variables
+ */
+function context_profiles_preprocess_page(&$variables) {
+
+  if (\Drupal::routeMatch()->getRouteName() === 'context_profiles.node.blocks_form') {
+    $variables['#attached']['library'][] = 'context_profiles/context_profiles';
+  }
+
+
+}

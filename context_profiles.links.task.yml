@@ -1,0 +1,4 @@
+context_profiles.node.blocks_form:
+  title: 'Blocks'
+  route_name: context_profiles.node.blocks_form
+  base_route: entity.node.canonical

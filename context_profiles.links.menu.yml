@@ -1,6 +1,17 @@
 context_profiles.settings:
   title: 'Context Profiles'
   description: 'Administer Context Profiles'
-  parent: system.admin_structure
+  parent: entity.context.collection
   route_name: context_profiles.settings
   weight: 100
+
+context_profiles.settings.regions:
+  title: 'Regions'
+  parent: context_profiles.settings
+  route_name: context_profiles.settings.regions
+
+context_profiles.settings.blocks:
+  title: 'Blocks'
+  parent: context_profiles.settings
+  route_name: context_profiles.settings.blocks
+
