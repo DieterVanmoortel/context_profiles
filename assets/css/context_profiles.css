@@ -1,17 +1,40 @@
-#edit-regions, #edit-disabled {
-    width: 30%;
-    margin: 10px;
+#edit-regions {
+    width: 240px;
+    display: inline-block;
+    left: 31px;
+    position: absolute;
+    margin-bottom: 20px;
+}
+#edit-disabled {
+    margin-left: 330px;
     display: inline-block;
     float: left;
+}
+#edit-disabled .form-wrapper {
+    padding:0;
+    margin:0;
+    display: inline;
+}
+#edit-disabled .reset-block{
+    display: none;
 }
 
 #edit-regions fieldset {
     background-color: white;
 }
-
 #edit-regions .region-droppable{
     padding: 25px;
     background-color: #e8e8e8;
+}
+#edit-regions .region-droppable.region-active{
+    padding: 25px;
+    background-color: #5ad2aa;
+}
+
+.reset-block {
+    position: absolute;
+    top: 8px;
+    right: 8px;
 }
 
 .form-item.ui-draggable {
@@ -21,8 +44,12 @@
     display: inline-block;
     background-color: #5ad2fa;
     border-radius: 2px;
+    position: relative;
 }
-
 .form-item.ui-draggable input{
-    display:none;
+    display: none;
+}
+.form-actions{
+    clear: both;
+    float: right;
 }

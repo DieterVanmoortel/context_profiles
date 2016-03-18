@@ -6,19 +6,31 @@
 
 namespace Drupal\context_profiles\Form;
 
+use Drupal\block\Entity\Block;
+use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
 use Drupal\context_profiles\ContextProfiles;
+use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\context\Entity\Context;
 
 
-class BlockLayoutForm extends BaseConfigForm {
+class BlockLayoutForm extends FormBase {
 
   private $contextProfile;
+
+  protected $context;
+
+  protected $reaction;
 
   private function getContextProfile() {
     return $this->contextProfile;
   }
+
+  protected function getSubmitValue() {
+    // TODO: Implement getSubmitValue() method.
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -32,23 +44,34 @@ class BlockLayoutForm extends BaseConfigForm {
 
   public function buildForm(array $form, FormStateInterface $form_state, NodeInterface $node = NULL) {
 
-//    $form['context'] = array(
-//      '#type' => 'value',
-//      '#value' => $this->initializeContext($node),
-//    );
+    $this->context = $this->initializeContext($node);
+
+    if ($this->context->hasReaction('blocks')) {
+      $this->reaction = $this->context->getReaction('blocks');
+    }
 
     $form['active_contexts'] = array(
       '#type' => 'fieldset',
       '#title' => t('Active contexts'),
     );
 
+//    $form['active_contexts'] = array(
+//      '#type' => 'fieldset',
+//      '#title' => t('Active contexts'),
+//    );
+
     $form['regions'] = array(
       '#type' => 'fieldset',
       '#title' => t('Regions'),
     );
 
+    $form['disabled'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Available Blocks'),
+    );
+
     $region_list = $this->getContextProfile()->getRegions();
-    foreach($region_list as $region_id => $region_name) {
+    foreach ($region_list as $region_id => $region_name) {
       $form['regions'][$region_id] = array(
         '#type' => 'fieldset',
         '#title' => $region_name,
@@ -61,10 +84,16 @@ class BlockLayoutForm extends BaseConfigForm {
 
     $entities = $this->getContextProfile()->getAvailableBlocks();
 
-    $form['disabled'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Disabled Blocks'),
-    );
+    $reactions = $this->context->get('reactions');
+    $blocks = isset($reactions['blocks']['blocks']) ? $reactions['blocks']['blocks'] : array();
+
+    $placed_blocks = array();
+    foreach ((array)$blocks as $uuid => $config_block) {
+      $placed_blocks[$config_block['id']] = $config_block['region'];
+      if (isset($entities[$config_block['id']])){
+        $entities[$config_block['id']]['uuid'] = $uuid;
+      }
+    }
 
     $form['blocks'] = array(
       '#type' => 'value',
@@ -72,13 +101,31 @@ class BlockLayoutForm extends BaseConfigForm {
     );
 
     foreach ($entities as $id => $entity) {
-      $form['disabled'][$id] = array(
+      $block_field = array(
         '#type' => 'textfield',
-        '#title' => $entity->label(),
+        '#title' => $entity['admin_label'],
         '#attributes' => array(
           'class' => array('draggable-block'),
         ),
       );
+
+      // Add placeholder in disabled region
+      $form['disabled']['wrap-' . $id] = array(
+        '#type' => 'container',
+        '#attributes' => array(
+          'class' => array('form-wrapper'),
+          'id' => 'wrap-' . $id
+        )
+      );
+
+      if (isset($placed_blocks[$id])) {
+        $region = $placed_blocks[$id];
+        $block_field['#default_value'] = $region;
+        $form['regions'][$region][$id] = $block_field;
+      }
+      else {
+        $form['disabled']['wrap-' . $id][$id] = $block_field;
+      }
     }
 
     $form['actions'] = array('#type' => 'actions');
@@ -92,45 +139,77 @@ class BlockLayoutForm extends BaseConfigForm {
   }
 
 
-
   /**
    * @param array $form
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $enabled_blocks = array();
-    foreach ($form_state->getValue('blocks') as $bid => $name) {
-      $block_region = $form_state->getValue($bid);
-      if(!empty($block_region)){
-        $enabled_blocks['blocks'][$bid] = $block_region;
+
+    $blocks = $form_state->getValue('blocks');
+
+    foreach($blocks as $block) {
+
+      $plugin = $block['id'];
+      $region = $form_state->getValue($plugin);
+      if ($region) {
+        $configuration = array(
+          'id' => 'profile_' . $plugin,
+          'status' => TRUE,
+          'plugin' => $plugin,
+          'visibility' => array(),
+          'theme' => 'bartik',
+          'region' => $region,
+        );
       }
+      elseif(isset($block['uuid'])) {
+        $this->reaction->removeBlock($plugin);
+      }
+      if (isset($block['uuid'])) {
+        $configuration['uuid'] = $uuid;
+      }
+
+      // Add/Update the block.
+      if (!isset($configuration['uuid'])) {
+        $this->reaction->addBlock($configuration);
+      } else {
+        $this->reaction->updateBlock($configuration['uuid'], $configuration);
+      }
+
     }
 
-//
-//    $context = Context::create(array(
-//      'id' => 'node-1',
-//      'name' => 'node-1',
-//      'label' => 'Custom context',
-//      )
-//    );
-//    $context->save();
-
-
+    $this->context->save();
   }
 
+
+  /**
+   * Get or set node specific context.
+   *
+   * @param $node
+   *
+   * @return \Drupal\Core\Entity\EntityInterface|null|static
+   */
   private function initializeContext($node) {
-    dpm($node->getType());
-    $id = 'node-' . $node->nid;
+    $id = 'node_profile_' . $node->id();
     $context = Context::load($id);
-    if(!$context) {
+    if (!$context) {
       $context = Context::create(array(
         'id' => $id,
         'name' => $id,
-        'label' => 'Custom context',
+        'group' => 'Node profiles',
+        'label' => 'Profile : ' . $node->getTitle(),
       ));
+
+      $conditions['request_path'] = array(
+        'id' => 'request_path',
+        'pages' => '/node/' . $node->id(),
+      );
+      $context->set('conditions', $conditions);
+
+      // Save only when form is submitted.
     }
-    dpm($context);
+
     return $context;
   }
 
 }
+

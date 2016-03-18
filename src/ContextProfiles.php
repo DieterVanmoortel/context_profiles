@@ -2,6 +2,8 @@
 
 namespace Drupal\context_profiles;
 
+use Drupal\block\Entity\Block;
+
 class ContextProfiles {
 
   public function getRegions() {
@@ -13,7 +15,14 @@ class ContextProfiles {
   }
 
   public function getAvailableBlocks() {
-    return entity_load_multiple('block');
+    $block_manager = \Drupal::service('plugin.manager.block');
+
+    // Only add blocks which work without any available context.
+    $blocks = $block_manager->getDefinitionsForContexts();
+    // Order by category, and then by admin label.
+//    $blocks = $block_manager->getSortedDefinitions($blocks);
+
+    return $blocks;
   }
 
 }
