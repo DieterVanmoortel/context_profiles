@@ -8,12 +8,6 @@ context_profiles.settings:
     roles_blocks:
       type: mapping
       label: 'Role based configuration for blocks'
-
-
-#context_profiles.*:
-#  type: config_object
-#  label: 'Context Profiles Node Layout'
-#  mapping:
-#    enabled_blocks:
-#      type: mapping
-#      label: 'Enabled blocks'
+    roles_providers:
+      type: mapping
+      label: 'Role based configuration for providers'

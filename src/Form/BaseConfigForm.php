@@ -6,11 +6,14 @@
 
 namespace Drupal\context_profiles\Form;
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\user\Form\UserPermissionsForm;
 
 abstract class BaseConfigForm extends UserPermissionsForm {
 
+  /**
+   * @param $form
+   * @return mixed
+   */
   public function buildRolesHeaderForm(&$form) {
 
     $user_roles = array();
@@ -23,16 +26,18 @@ abstract class BaseConfigForm extends UserPermissionsForm {
       '#type' => 'value',
       '#value' => $user_roles,
     );
-    $form['regions'] = array(
+    $form['rows'] = array(
       '#type' => 'table',
-      //'#header' => array($this->t('Roles')),
       '#id' => 'roles',
       '#attributes' => ['class' => ['roles', 'js-roles']],
       '#sticky' => TRUE,
     );
-
+    // Empty cell for aestethic purposes
+    $form['rows']['#header'][] = array(
+      'data' => '',
+    );
     foreach ($user_roles as $name) {
-      $form['regions']['#header'][] = array(
+      $form['rows']['#header'][] = array(
         'data' => $name,
         'class' => array('checkbox'),
       );

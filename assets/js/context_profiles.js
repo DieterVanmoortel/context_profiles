@@ -17,33 +17,43 @@
   Drupal.behaviors.contextProfiles = {
     attach: function (context, settings) {
 
-      $('.draggable-block').parent().draggable({
+      $('.draggable-block').draggable({
         appendTo: "#edit-regions",
         connectToSortable: ".region-droppable",
         revert: "invalid",
-        helper: "clone",
-        scope: 'region-block'
-      }).append('<span class="reset-block">X</span>');
+        stack: ".draggable-block",
+        scope: 'region-block',
+        stop: function( event, ui ) {
+          var region = $(this).parents('.region-droppable');
+          Drupal.behaviors.contextProfiles.adjustBlockWeights(region);
+        }
+      });
+
+      $('.region-disabled').sortable({
+        items: ".block-form"
+      });
 
       $('.region-droppable').droppable({
-        accept: '.form-item',
+        addClasses: false,
+        tolerance: "pointer",
+        accept: '.draggable-block',
         scope: 'region-block',
-//        tolerance: "touch",
         hoverClass: "region-active",
         drop: function(event, ui) {
           var region = $(this).attr('id');
-          ui.draggable.find('input').attr('value', region);
-          Drupal.behaviors.contextProfiles.moveBlock(ui.draggable, $(this).find('.fieldset-wrapper'));
+          ui.draggable.find('.block-region').attr('value', region);
         },
         out: function(event, ui) {
-          ui.draggable.find('input').attr('value', '');
+          ui.draggable.find('.block-region').attr('value', '');
         }
+      }).sortable({
+        items: ".draggable-block, .sortable-block"
       });
 
       $('.reset-block').on('click', function(e){
         $(this).parent().find('input').attr('value', '');
-        var id = $(this).parent().find('.draggable-block').attr('name');
-        var parent = $('#edit-disabled').find('#wrap-' + id);
+        var plugin = $(this).parent().attr('plugin');
+        var parent = $('#edit-disabled').find('#wrap-' + plugin);
         Drupal.behaviors.contextProfiles.moveBlock($(this).parent(), parent);
       });
     },
@@ -53,6 +63,11 @@
           .appendTo( $parent )
           .fadeIn();
       });
+    },
+    adjustBlockWeights( item ) {
+      item.find('.block-weight').each(function(i) {
+        $(this).val(i-10); // weight field starts at -10
+      })
     }
   };
 

@@ -15,3 +15,8 @@ context_profiles.settings.blocks:
   parent: context_profiles.settings
   route_name: context_profiles.settings.blocks
 
+context_profiles.settings.providers:
+  title: 'Providers'
+  parent: context_profiles.settings
+  route_name: context_profiles.settings.providers
+

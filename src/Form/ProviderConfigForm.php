@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\context_profiles\Form\RegionConfigForm
+ * Contains \Drupal\context_profiles\Form\ProviderConfigForm
  */
 
 namespace Drupal\context_profiles\Form;
@@ -10,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\context_profiles\Form\BaseConfigForm;
 use Drupal\context_profiles\ContextProfile;
 
-class RegionConfigForm extends BaseConfigForm {
+class ProviderConfigForm extends BaseConfigForm {
 
   /**
    * {@inheritdoc}
@@ -25,32 +25,41 @@ class RegionConfigForm extends BaseConfigForm {
 
     $user_roles = $form['user_roles']['#value'];
 
-    // TODO : Implement ContextProfilesManager
-    $theme_handler = \Drupal::service('theme_handler');
-    $theme_name = $theme_handler->getDefault();
-    $theme = $theme_handler->getTheme($theme_name);
-    $info = $theme->info;
-    $regions = $info['regions'];
+//    // TODO : Implement ContextProfilesManager
+    $this->blockManager = \Drupal::service('plugin.manager.block');
+    $blocks = $this->blockManager->getDefinitionsForContexts();
+    $grouped_blocks = $this->blockManager->getGroupedDefinitions($blocks);
 
-    $default_values = $this->config('context_profiles.settings')
-      ->get('roles_regions');
+    $providers = array();
+    foreach($grouped_blocks as $provider_label => $blocks) {
+      foreach($blocks as $block){
+        $provider = $block['provider'];
+        if (!isset($providers[$provider])) {
+          $providers[$provider] = $provider_label;
+        }
+      }
+    }
 
-    foreach($regions as $region => $region_name) {
-      $form['rows'][$region]['description'] = array(
-        '#markup' => $region_name,
+
+//    $default_values = $this->config('context_profiles.settings')
+//      ->get('roles_regions');
+
+    foreach($providers as $provider => $provider_label) {
+      $form['rows'][$provider]['description'] = array(
+        '#markup' => $provider_label,
       );
       foreach ($user_roles as $rid => $role_name) {
         $default = $default_values[$rid];
-        $form['rows'][$region][$rid] = array(
-          '#title' => $role_name . ': ' . $region_name,
+        $form['rows'][$provider][$rid] = array(
+          '#title' => $role_name . ': ' . $provider_label,
           '#title_display' => 'invisible',
           '#wrapper_attributes' => array(
             'class' => array('checkbox'),
           ),
           '#type' => 'checkbox',
-          '#default_value' => isset($default[$region]),
+          '#default_value' => isset($default[$provider]),
           '#attributes' => array('class' => array('rid-' . $rid, 'js-rid-' . $rid)),
-          '#parents' => array($rid, $region),
+          '#parents' => array($rid, $provider),
         );
       }
     }
@@ -58,7 +67,7 @@ class RegionConfigForm extends BaseConfigForm {
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => $this->t('Save Region Configuration'),
+      '#value' => $this->t('Save Block Provider Configuration'),
       '#button_type' => 'primary',
     );
 
@@ -71,11 +80,11 @@ class RegionConfigForm extends BaseConfigForm {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     foreach ($form_state->getValue('user_roles') as $rid => $name) {
-      $region_settings[$rid] = array_filter($form_state->getValue($rid));
+      $provider_settings[$rid] = array_filter($form_state->getValue($rid));
     }
 
     \Drupal::configFactory()->getEditable('context_profiles.settings')
-      ->set('roles_regions', $region_settings)
+      ->set('roles_providers', $provider_settings)
       ->save();
 
     drupal_set_message($this->t('The changes have been saved.'));

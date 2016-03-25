@@ -20,6 +20,16 @@ context_profiles.settings.regions:
   options:
     _admin_route: TRUE
 
+context_profiles.settings.providers:
+  path: '/admin/structure/context/profiles/providers'
+  defaults:
+    _form: '\Drupal\context_profiles\Form\ProviderConfigForm'
+    _title: 'Providers'
+  requirements:
+    _permission: 'administer context profiles'
+  options:
+    _admin_route: TRUE
+
 context_profiles.settings.blocks:
   path: '/admin/structure/context/profiles/blocks'
   defaults:

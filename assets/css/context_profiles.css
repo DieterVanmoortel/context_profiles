@@ -1,55 +1,80 @@
+/* DISABLED BLOCKS REGION */
+#edit-disabled {
+    margin-right: 330px;
+    display: block;
+}
+#edit-disabled .block-placeholder {
+    padding:0;
+    margin:0;
+    display: inline-block;
+}
+
+#edit-disabled .disabled-provider{
+    display:none;
+}
+
+/* REGIONS ZONE */
 #edit-regions {
     width: 240px;
     display: inline-block;
-    left: 31px;
     position: absolute;
-    margin-bottom: 20px;
+    margin: 0;
+    right: 32px;
 }
-#edit-disabled {
-    margin-left: 330px;
-    display: inline-block;
-    float: left;
-}
-#edit-disabled .form-wrapper {
-    padding:0;
-    margin:0;
-    display: inline;
-}
-#edit-disabled .reset-block{
-    display: none;
-}
-
-#edit-regions fieldset {
+#edit-regions fieldset, .block-provider {
     background-color: white;
 }
 #edit-regions .region-droppable{
-    padding: 25px;
+    padding: 32px 8px 8px;
     background-color: #e8e8e8;
+    min-height: 45px;
 }
 #edit-regions .region-droppable.region-active{
-    padding: 25px;
     background-color: #5ad2aa;
 }
+#edit-regions .disabled {
 
-.reset-block {
-    position: absolute;
-    top: 8px;
-    right: 8px;
+}
+#edit-regions .block-form.draggable-block .reset-block{
+    display:block;
 }
 
-.form-item.ui-draggable {
-    padding: 8px;
+/* DRAGGABLE BLOCKS */
+.block-form {
+    padding: 4px 8px;
     margin: 4px;
     width: 200px;
     display: inline-block;
-    background-color: #5ad2fa;
     border-radius: 2px;
     position: relative;
 }
-.form-item.ui-draggable input{
+.draggable-block {
+    background-color: #5ad2fa;
+}
+.sortable-block {
+    background-color: grey;
+}
+.draggable-block:hover {
+    background-color: #ff8c46;
+    color: #ffffff;
+}
+.block-form .form-item{
     display: none;
 }
-.form-actions{
+.block-form .reset-block {
+    display: none;
+}
+.draggable-block.block-form .reset-block {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+}
+.draggable-block .reset-block:hover {
+    cursor: pointer;
+}
+
+
+/* REMAINING FORM ELEMENTS */
+.form-actions {
     clear: both;
-    float: right;
 }

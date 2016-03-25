@@ -1,0 +1,4 @@
+services:
+  context_profiles.manager:
+    class: Drupal\context_profiles\ContextProfilesManager
+    arguments: ['@theme_handler', '@context.manager', '@plugin.manager.block']
