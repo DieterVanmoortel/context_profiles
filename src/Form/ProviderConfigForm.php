@@ -25,33 +25,28 @@ class ProviderConfigForm extends BaseConfigForm {
 
     $user_roles = $form['user_roles']['#value'];
 
-//    // TODO : Implement ContextProfilesManager
-    $this->blockManager = \Drupal::service('plugin.manager.block');
-    $blocks = $this->blockManager->getDefinitionsForContexts();
-    $grouped_blocks = $this->blockManager->getGroupedDefinitions($blocks);
+    $available_blocks = $this->getContextProfilesManager()
+      ->getAvailableBlockDefinitions();
 
     $providers = array();
-    foreach($grouped_blocks as $provider_label => $blocks) {
-      foreach($blocks as $block){
-        $provider = $block['provider'];
-        if (!isset($providers[$provider])) {
-          $providers[$provider] = $provider_label;
-        }
+    foreach($available_blocks as $block) {
+      $provider = $block['provider'];
+      if (!isset($providers[$provider])) {
+        $providers[$provider] = $provider;
       }
     }
 
+    $default_values = $this->config('context_profiles.settings')
+      ->get('roles_providers');
 
-//    $default_values = $this->config('context_profiles.settings')
-//      ->get('roles_regions');
-
-    foreach($providers as $provider => $provider_label) {
+    foreach($providers as $provider) {
       $form['rows'][$provider]['description'] = array(
-        '#markup' => $provider_label,
+        '#markup' => $provider,
       );
       foreach ($user_roles as $rid => $role_name) {
         $default = $default_values[$rid];
         $form['rows'][$provider][$rid] = array(
-          '#title' => $role_name . ': ' . $provider_label,
+          '#title' => $role_name . ': ' . $provider,
           '#title_display' => 'invisible',
           '#wrapper_attributes' => array(
             'class' => array('checkbox'),

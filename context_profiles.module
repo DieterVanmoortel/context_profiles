@@ -11,5 +11,4 @@ function context_profiles_preprocess_page(&$variables) {
     $variables['#attached']['library'][] = 'context_profiles/context_profiles';
   }
 
-
 }

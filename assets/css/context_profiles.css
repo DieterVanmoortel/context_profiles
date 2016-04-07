@@ -1,39 +1,41 @@
 /* DISABLED BLOCKS REGION */
 #edit-disabled {
-    margin-right: 330px;
+    width: 480px;
     display: block;
 }
 #edit-disabled .block-placeholder {
     padding:0;
     margin:0;
-    display: inline-block;
+    display: inline;
 }
 
 #edit-disabled .disabled-provider{
     display:none;
 }
-
+#edit-disabled .form-provider {
+    padding: 32px 8px 8px;
+}
 /* REGIONS ZONE */
 #edit-regions {
-    width: 240px;
-    display: inline-block;
+    display: block;
     position: absolute;
-    margin: 0;
-    right: 32px;
+    left: 530px;
+    right: 0;
+    margin-top: 0;
 }
-#edit-regions fieldset, .block-provider {
-    background-color: white;
+#edit-regions fieldset {
+    background-color: #e8e8e8;
 }
 #edit-regions .region-droppable{
     padding: 32px 8px 8px;
-    background-color: #e8e8e8;
+    background-color: white;
     min-height: 45px;
 }
 #edit-regions .region-droppable.region-active{
     background-color: #5ad2aa;
 }
-#edit-regions .disabled {
-
+#edit-regions .region-disabled {
+    padding: 32px 8px 8px;
 }
 #edit-regions .block-form.draggable-block .reset-block{
     display:block;
@@ -73,8 +75,12 @@
     cursor: pointer;
 }
 
-
 /* REMAINING FORM ELEMENTS */
 .form-actions {
     clear: both;
+}
+
+
+.form-type-select{
+    /*display:block !important;*/
 }

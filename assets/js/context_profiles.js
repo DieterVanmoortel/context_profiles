@@ -29,6 +29,16 @@
         }
       });
 
+      $('.sortable-block').draggable({
+        appendTo: "#edit-regions",
+        connectToSortable: ".region-droppable",
+        containment: "parent",
+        stop: function( event, ui ) {
+          var region = $(this).parents('.region-droppable');
+          Drupal.behaviors.contextProfiles.adjustBlockWeights(region);
+        }
+      });
+
       $('.region-disabled').sortable({
         items: ".block-form"
       });
@@ -50,7 +60,7 @@
         items: ".draggable-block, .sortable-block"
       });
 
-      $('.reset-block').on('click', function(e){
+      $('.reset-block').on('click', function(e) {
         $(this).parent().find('input').attr('value', '');
         var plugin = $(this).parent().attr('plugin');
         var parent = $('#edit-disabled').find('#wrap-' + plugin);
@@ -64,9 +74,22 @@
           .fadeIn();
       });
     },
-    adjustBlockWeights( item ) {
-      item.find('.block-weight').each(function(i) {
-        $(this).val(i-10); // weight field starts at -10
+    adjustBlockWeights: function( region ) {
+      var index = -10;
+      var draggable = true;
+      region.find('.block-weight').each(function() {
+        if($(this).parents('.block-form').hasClass('draggable-block')) {
+          $(this).val(index);
+          index++;
+          draggable = true;
+        }
+        else{
+          index = $(this).val();
+          if (!draggable) {
+            index++;
+          }
+          draggable = false;
+        }
       })
     }
   };

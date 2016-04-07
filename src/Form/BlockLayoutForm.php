@@ -6,7 +6,7 @@
 
 namespace Drupal\context_profiles\Form;
 
-use Drupal\block\Entity\Block;
+use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeInterface;
 use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
@@ -17,26 +17,17 @@ class BlockLayoutForm extends BlockFormBase {
 
   private $contextProfileManager;
 
-  protected $context;
+  private $current;
 
-  protected $reaction;
+  private $activeContexts;
 
-  protected $current;
-
-  /**
-   * @inheritDoc
-   */
-  protected function prepareBlock($block_id) {
-    // TODO: Implement prepareBlock() method.
-  }
 
   /**
    * @inheritDoc
    */
   protected function getSubmitValue() {
-    // TODO: Implement getSubmitValue() method.
+    return $this->t('Save Region Configuration');
   }
-
 
   private function getContextProfileManager() {
     if (!isset($this->contextProfileManager)) {
@@ -65,7 +56,7 @@ class BlockLayoutForm extends BlockFormBase {
       $form[] = array(
         '#type' => 'button',
         '#value' => $context->label(),
-        '#button_type' => 'secondary',
+        '#button_type' => $this->current->id() === $context->id() ? 'primary' : 'secondary',
         '#context' => $context->id(),
       );
     }
@@ -87,13 +78,15 @@ class BlockLayoutForm extends BlockFormBase {
 
     $this->initializeContexts($node);
 
-    if( $triggering_element = $form_state->getTriggeringElement() ) {
-      $this->current = $triggering_element['#context'];
-      $this->context = $this->activeContexts[$triggering_element['#context']];
+    if ($triggering_element = $form_state->getTriggeringElement()) {
+      $this->current = $this->activeContexts[$triggering_element['#context']];
     }
-    $this->reaction = $this->context->getReaction('blocks');
 
-
+    $form['current_context'] = array(
+      '#type' => 'value',
+      '#value' => $this->current->id(),
+    );
+    $this->reaction = $this->current->getReaction('blocks');
 
     // Start building the form.
     $form['active_contexts'] = $this->createActiveContextsForm();
@@ -106,12 +99,11 @@ class BlockLayoutForm extends BlockFormBase {
       '#type' => 'fieldset',
       '#title' => t('Available Blocks'),
     );
-
-    // TODO : add link to 'Add a new block' / add/block url
-//    $form['more'] = array(
-//      '#markup' => 'Add another block',
-//    );
-
+    $form['disabled']['add'] = array(
+      '#type' => 'link',
+      '#url' => Url::fromRoute('block_content.add_page'),
+      '#title' => $this->t('Add new content block'),
+    );
 
     $region_list = $this->getContextProfileManager()->getRegions();
     foreach ($region_list as $region_id => $region) {
@@ -125,7 +117,8 @@ class BlockLayoutForm extends BlockFormBase {
       );
     }
 
-    $available_blocks = $this->getContextProfileManager()->getAvailableBlocks();
+    $available_blocks = $this->getContextProfileManager()
+      ->getAvailableBlockDefinitions();
 
     foreach ($this->activeContexts as $context_id => $context) {
       $reactions = $context->get('reactions');
@@ -133,9 +126,7 @@ class BlockLayoutForm extends BlockFormBase {
 
       foreach ((array) $blocks as $uuid => $config_block) {
         $available_blocks[$config_block['id']]['config'] = $config_block;
-        if($context_id == $this->current) {
-          $available_blocks[$config_block['id']]['active'] = TRUE;
-        }
+        $available_blocks[$config_block['id']]['active'] = ($context_id == $this->current->id());
       }
     }
 
@@ -148,9 +139,8 @@ class BlockLayoutForm extends BlockFormBase {
 
     $index = 0;
     foreach ($available_blocks as $id => $entity) {
-
-      // Create new field.
-      $block_field = $this->createDraggableBlockForm($entity, $index);
+      // Create subform.
+      $block_form = $this->buildBlockForm($entity, $index);
 
       if (!isset($form['disabled'][$entity['provider']])) {
         $class = isset($provider_config[$entity['provider']]) ? 'form-provider' : 'disabled-provider';
@@ -178,13 +168,15 @@ class BlockLayoutForm extends BlockFormBase {
         $region = $entity['config']['region'];
         // TODO : create loop
 
-        $block_field['region']['#default_value'] = $region;
-        $block_field['weight']['#default_value'] = $entity['config']['weight'];
-        $block_field['label_display']['#default_value'] = $entity['config']['label_display'];
-        $form['regions'][$region][$index][$id] = $block_field;
+        $block_form['region']['#default_value'] = $region;
+        $block_form['weight']['#default_value'] = $entity['config']['weight'];
+        $block_form['label_display']['#default_value'] = $entity['config']['label_display'];
+
+        $form['regions'][$region][$index][$id] = $block_form;
+        $form['regions'][$region][$index]['#weight'] = $entity['config']['weight'];
       }
       else {
-        $form['disabled'][$entity['provider']]['wrap-' . $index][$id] = $block_field;
+        $form['disabled'][$entity['provider']]['wrap-' . $index][$id] = $block_form;
       }
 
       $index++;
@@ -193,7 +185,7 @@ class BlockLayoutForm extends BlockFormBase {
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => $this->t('Save Region Configuration'),
+      '#value' => $this->getSubmitValue(),
       '#button_type' => 'primary',
     );
 
@@ -208,35 +200,36 @@ class BlockLayoutForm extends BlockFormBase {
    *
    * @return array
    */
-  private function createDraggableBlockForm($entity, $index) {
+  private function buildBlockForm($entity, $index) {
 
     // Create new field.
-    $block_field = array(
+    $block_form = array(
       '#tree' => TRUE,
       '#type' => 'container',
       '#attributes' => array(
-        'class' => $this->getContextProfileManager()->addBehaviorClassToBlock($entity),
+        'class' => $this->getContextProfileManager()
+          ->addBehaviorClass($entity),
         'plugin' => $index,
       ),
     );
-    $block_field['admin-label'] = array(
+    $block_form['admin-label'] = array(
       '#type' => 'html_tag',
       '#tag' => 'label',
       '#value' => $entity['admin_label'],
     );
-    $block_field['region'] = array(
+    $block_form['region'] = array(
       '#type' => 'textfield',
       '#attributes' => array(
         'class' => array('block-region'),
       ),
     );
-    $block_field['weight'] = array(
+    $block_form['weight'] = array(
       '#type' => 'weight',
       '#attributes' => array(
         'class' => array('block-weight'),
       ),
     );
-    $block_field['label_display'] = array(
+    $block_form['label_display'] = array(
       '#type' => 'checkbox',
       '#title' => t('Show Block title'),
       '#return_value' => 'visible',
@@ -244,7 +237,7 @@ class BlockLayoutForm extends BlockFormBase {
         'class' => array('block-title'),
       ),
     );
-    $block_field['reset-block'] = array(
+    $block_form['reset-block'] = array(
       '#type' => 'html_tag',
       '#tag' => 'span',
       '#value' => 'X',
@@ -253,7 +246,7 @@ class BlockLayoutForm extends BlockFormBase {
       ),
     );
 
-    return $block_field;
+    return $block_form;
   }
 
 
@@ -262,22 +255,26 @@ class BlockLayoutForm extends BlockFormBase {
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    // TODO : Find out why this is necessary
+    if (!is_object($this->current)) {
+      $current = $form_state->getValue('current_context');
+      $this->current = Context::load($current);
+      $this->reaction = $this->current->getReaction('blocks');
+    }
+
     $blocks = $form_state->getValue('blocks');
     // Loop all plugins and add or remove from context.
     foreach ($blocks as $id => $block) {
-      $plugin = $block['id'];
-      $submitted_values = $form_state->getValue($id);
-      if (!empty($submitted_values['region'])) {
-        $configuration = $submitted_values;
-
+      $configuration = $form_state->getValue($id);
+      if (!empty($configuration['region'])) {
         // Add/Update the block.
         if (!isset($block['config'])) {
-//          $block = $this->prepareBlock($plugin);
-          dpm('Disabled: adding ' . $plugin);
-
+          $configuration += $block;
+          $configuration['id'] = $id;
+          $configuration['theme'] = $this->themeHandler->getDefault();
+          $this->reaction->addBlock($configuration);
         }
-        else {
-          dpm('updating block');
+        elseif ($block['active']) {
           $this->reaction->updateBlock($block['config']['uuid'], $configuration);
         }
       }
@@ -287,12 +284,18 @@ class BlockLayoutForm extends BlockFormBase {
 
     }
     // Only save if we have blocks.
-    if ($this->context->hasReaction('blocks')) {
-//      dpm('not saving context');
-      //$this->context->save();
+    if ($this->current->hasReaction('blocks')) {
+      $this->current->save();
     }
   }
 
+
+  /**
+   * @inheritDoc
+   */
+  protected function prepareBlock($configuration) {
+    return $configuration;
+  }
 
   /**
    * Get or set node specific context.
@@ -302,8 +305,6 @@ class BlockLayoutForm extends BlockFormBase {
    * @return \Drupal\Core\Entity\EntityInterface|null|static
    */
   private function initializeContexts($node) {
-    $this->activeContexts = $this->getContextProfileManager()->getActiveContexts();
-
     $id = 'node_profile_' . $node->id();
     $context = Context::load($id);
     if (!$context) {
@@ -319,23 +320,25 @@ class BlockLayoutForm extends BlockFormBase {
         'pages' => '/node/' . $node->id(),
       );
       $context->set('conditions', $conditions);
-
       // Save only when form is submitted.
     }
-    $this->context = $context;
-    $this->current = $context->id();
+
+    $this->current = $context;
     $this->activeContexts[$context->id()] = $context;
 
+    $this->activeContexts += $this->getContextProfileManager()
+      ->getActiveContexts();
+
     if ($context->hasReaction('blocks')) {
-      $this->reaction = $context->getReaction('blocks');
+      $this->reaction = $this->current->getReaction('blocks');
     }
     else {
-      // TODO : FIX THIS !!
-      $this->reaction = $this->getContextProfileManager()->createReactionInstance('blocks');
-      $context->addReaction($this->reaction->getConfiguration());
+      $this->reaction = $this->getContextProfileManager()
+        ->createReactionInstance('blocks');
+      $this->current->addReaction($this->reaction->getConfiguration());
     }
 
-    return $context;
+    return $this->current;
   }
 
 }

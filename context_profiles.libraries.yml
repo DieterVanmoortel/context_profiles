@@ -7,6 +7,7 @@ context_profiles:
       assets/vendor/jquery.ui/themes/base/dialog.css: {}
     theme:
       assets/css/context_profiles.css: {}
+      assets/css/bartik.css: {}
   dependencies:
     - core/jquery
     - core/jquery.ui

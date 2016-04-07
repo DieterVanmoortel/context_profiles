@@ -10,6 +10,18 @@ use Drupal\user\Form\UserPermissionsForm;
 
 abstract class BaseConfigForm extends UserPermissionsForm {
 
+  private $contextProfileManager;
+
+  /**
+   * @return mixed
+   */
+  protected function getContextProfilesManager() {
+    if (!isset($this->contextProfileManager)) {
+      $this->contextProfileManager = \Drupal::service('context_profiles.manager');
+    }
+    return $this->contextProfileManager;
+  }
+
   /**
    * @param $form
    * @return mixed
