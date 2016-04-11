@@ -80,6 +80,15 @@
     clear: both;
 }
 
+.context-1 {border-left:4px solid red !important;}
+.context-2 {border-left:4px solid green !important;}
+.context-3 {border-left:4px solid blue !important;}
+.context-4 {border-left:4px solid yellow !important;}
+
+
+
+
+
 
 .form-type-select{
     /*display:block !important;*/

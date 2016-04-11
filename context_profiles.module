@@ -6,9 +6,39 @@
  * @param $variables
  */
 function context_profiles_preprocess_page(&$variables) {
-
-  if (\Drupal::routeMatch()->getRouteName() === 'context_profiles.node.blocks_form') {
+  if (\Drupal::routeMatch()->getRouteObject()->getOption('_context_profiles_entity_type_id')) {
     $variables['#attached']['library'][] = 'context_profiles/context_profiles';
   }
 
+}
+
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function context_profiles_entity_type_alter(array &$entity_types) {
+  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  foreach ($entity_types as $entity_type_id => $entity_type) {
+//    if (($entity_type->getFormClass('default') || $entity_type->getFormClass('edit')) && $entity_type->hasLinkTemplate('edit-form')) {
+      $entity_type->setLinkTemplate('context-profile', "/$entity_type_id/{{$entity_type_id}}/blocks");
+//    }
+  }
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function context_profiles_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
+  $operations = array();
+  if (\Drupal::currentUser()->hasPermission('use context profile ui')) {
+    if ($entity->hasLinkTemplate('context-profile')) {
+      $operations['context-profile'] = array(
+        'title' => t('Blocks'),
+        'weight' => 100,
+        'url' => $entity->toUrl('context-profile'),
+      );
+    }
+  }
+
+  return $operations;
 }

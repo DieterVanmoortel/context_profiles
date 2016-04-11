@@ -39,14 +39,3 @@ context_profiles.settings.blocks:
     _permission: 'administer context profiles'
   options:
     _admin_route: TRUE
-
-context_profiles.node.blocks_form:
-  path: '/node/{node}/blocks'
-  defaults:
-    _form: '\Drupal\context_profiles\Form\BlockLayoutForm'
-    _title: 'Blocks'
-  requirements:
-    _permission: 'administer context profiles'
-    node: \d+
-  options:
-    _admin_route: TRUE

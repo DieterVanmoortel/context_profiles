@@ -183,6 +183,7 @@ class ContextProfilesManager extends PluginBase {
 
     $regions = $this->getRegionConfig();
     if (isset($entity['config'])) {
+      $classes[] = $entity['context-class'];
       if (!isset($regions[$entity['config']['region']]) || !$entity['active']) {
         $draggable = FALSE;
       }

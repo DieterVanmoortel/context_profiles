@@ -12,6 +12,7 @@ use Drupal\node\NodeInterface;
 use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
 use Drupal\context\Entity\Context;
 use Drupal\context_profiles\ContextProfilesManager;
+use Drupal\Core\Routing\RouteMatchInterface;
 
 class BlockLayoutForm extends BlockFormBase {
 
@@ -29,6 +30,9 @@ class BlockLayoutForm extends BlockFormBase {
     return $this->t('Save Region Configuration');
   }
 
+  /**
+   * @return mixed
+   */
   private function getContextProfileManager() {
     if (!isset($this->contextProfileManager)) {
       $this->contextProfileManager = \Drupal::service('context_profiles.manager');
@@ -51,14 +55,16 @@ class BlockLayoutForm extends BlockFormBase {
       '#type' => 'fieldset',
       '#title' => t('Active contexts'),
     );
-
+    $index = 0;
     foreach ($this->activeContexts as $context) {
       $form[] = array(
         '#type' => 'button',
         '#value' => $context->label(),
         '#button_type' => $this->current->id() === $context->id() ? 'primary' : 'secondary',
         '#context' => $context->id(),
+        '#attributes' => array('class'=> array('context-' . $index ))
       );
+      $index++;
     }
 
     return $form;
@@ -74,9 +80,12 @@ class BlockLayoutForm extends BlockFormBase {
    *
    * @return array
    */
-  public function buildForm(array $form, FormStateInterface $form_state, NodeInterface $node = NULL) {
+  public function buildForm(array $form, FormStateInterface $form_state, RouteMatchInterface $route_match = NULL) {
 
-    $this->initializeContexts($node);
+    $entity_type = $route_match->getRouteObject()->getOption('_context_profiles_entity_type_id');
+    $entity = $route_match->getParameter($entity_type);
+
+    $this->initializeContexts($entity, $entity_type);
 
     if ($triggering_element = $form_state->getTriggeringElement()) {
       $this->current = $this->activeContexts[$triggering_element['#context']];
@@ -117,9 +126,9 @@ class BlockLayoutForm extends BlockFormBase {
       );
     }
 
-    $available_blocks = $this->getContextProfileManager()
-      ->getAvailableBlockDefinitions();
+    $available_blocks = $this->getContextProfileManager()->getAvailableBlockDefinitions();
 
+    $index = 0;
     foreach ($this->activeContexts as $context_id => $context) {
       $reactions = $context->get('reactions');
       $blocks = isset($reactions['blocks']['blocks']) ? $reactions['blocks']['blocks'] : array();
@@ -127,7 +136,9 @@ class BlockLayoutForm extends BlockFormBase {
       foreach ((array) $blocks as $uuid => $config_block) {
         $available_blocks[$config_block['id']]['config'] = $config_block;
         $available_blocks[$config_block['id']]['active'] = ($context_id == $this->current->id());
+        $available_blocks[$config_block['id']]['context-class'] = 'context-' . $index;
       }
+      $index++;
     }
 
     $form['blocks'] = array(
@@ -298,27 +309,31 @@ class BlockLayoutForm extends BlockFormBase {
   }
 
   /**
-   * Get or set node specific context.
+   * Get or set entity specific context.
    *
-   * @param $node
+   * @param /stdClass $entity
+   * @param string $type
    *
-   * @return \Drupal\Core\Entity\EntityInterface|null|static
+   * @return Context
    */
-  private function initializeContexts($node) {
-    $id = 'node_profile_' . $node->id();
+  private function initializeContexts($entity, $type) {
+
+    $id = $type . '_profile_' . $entity->id();
+
     $context = Context::load($id);
     if (!$context) {
       $context = Context::create(array(
         'id' => $id,
         'name' => $id,
-        'group' => 'Node profiles',
-        'label' => 'Profile : ' . $node->getTitle(),
+        'group' => $type . ' profiles',
+        'label' => 'Profile : ' . $entity->label(),
       ));
 
       $conditions['request_path'] = array(
         'id' => 'request_path',
-        'pages' => '/node/' . $node->id(),
+        'pages' => '/'. str_replace('_', '/', $type) .'/' . $entity->id(),
       );
+
       $context->set('conditions', $conditions);
       // Save only when form is submitted.
     }
