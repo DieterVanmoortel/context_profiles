@@ -5,9 +5,6 @@ context_profiles.settings:
     roles_regions:
       type: mapping
       label: 'Role based configuration for regions'
-    roles_blocks:
-      type: mapping
-      label: 'Role based configuration for blocks'
     roles_providers:
       type: mapping
       label: 'Role based configuration for providers'

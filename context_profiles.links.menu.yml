@@ -7,16 +7,13 @@ context_profiles.settings:
 
 context_profiles.settings.regions:
   title: 'Regions'
+  description: 'Select what regions are available on a role base.'
   parent: context_profiles.settings
   route_name: context_profiles.settings.regions
 
-context_profiles.settings.blocks:
-  title: 'Blocks'
-  parent: context_profiles.settings
-  route_name: context_profiles.settings.blocks
-
 context_profiles.settings.providers:
   title: 'Providers'
+  description: 'Select which block providers are available on a role base.'
   parent: context_profiles.settings
   route_name: context_profiles.settings.providers
 
