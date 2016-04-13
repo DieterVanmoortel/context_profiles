@@ -40,7 +40,8 @@ class RegionConfigForm extends BaseConfigForm {
         '#markup' => $region_name,
       );
       foreach ($user_roles as $rid => $role_name) {
-        $default = $default_values[$rid];
+
+        $default = isset($default_values[$rid]) ? $default_values[$rid] : array();
         $form['rows'][$region][$rid] = array(
           '#title' => $role_name . ': ' . $region_name,
           '#title_display' => 'invisible',

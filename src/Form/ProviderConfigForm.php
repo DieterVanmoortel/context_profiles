@@ -44,7 +44,7 @@ class ProviderConfigForm extends BaseConfigForm {
         '#markup' => $provider,
       );
       foreach ($user_roles as $rid => $role_name) {
-        $default = $default_values[$rid];
+        $default = isset($default_values[$rid]) ? $default_values[$rid] : array();
         $form['rows'][$provider][$rid] = array(
           '#title' => $role_name . ': ' . $provider,
           '#title_display' => 'invisible',

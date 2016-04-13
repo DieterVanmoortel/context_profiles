@@ -14,7 +14,6 @@ use Drupal\user\Entity\User;
 
 class ContextProfilesManager extends PluginBase {
 
-//  private $theme;
   /**
    * @var
    */
@@ -55,6 +54,17 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
+   * Create new instance of Reaction.
+   *
+   * @param string $type
+   *
+   * @return ContextReactionInterface
+   */
+  public function createReactionInstance($type) {
+    return $this->contextReactionManager->createInstance($type);
+  }
+
+  /**
    * @return theme
    */
   private function getTheme() {
@@ -62,7 +72,7 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   *
+   * Get Roles for the current user.
    */
   private function getUserRoles() {
     $account = \Drupal::currentUser();
@@ -71,7 +81,9 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * @param $config
+   * Return config options for all assigned roles.
+   *
+   * @param array $config
    * @return array
    */
   private function mergeConfigRoles($config) {
@@ -100,7 +112,7 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * @return mixed
+   * @return array
    */
   private function getRegionConfig() {
     if (!isset($this->regionConfig)) {
@@ -113,6 +125,8 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
+   * Return all regions, based on config.
+   *
    * @return array
    */
   public function getRegions() {
@@ -161,13 +175,6 @@ class ContextProfilesManager extends PluginBase {
     // TODO : Add an alter for other modules
 
     return $blocks;
-  }
-
-  /**
-   * @param $type
-   */
-  public function createReactionInstance($type) {
-    return $this->contextReactionManager->createInstance($type);
   }
 
   /**

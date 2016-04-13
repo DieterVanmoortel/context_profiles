@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * Subscriber for Devel routes.
+ * Subscriber for Context Profile routes.
  */
 class RouteSubscriber extends RouteSubscriberBase {
 
@@ -48,7 +48,7 @@ class RouteSubscriber extends RouteSubscriberBase {
   }
 
   /**
-   * Gets the devel load route.
+   * Gets the Context Profile UI route.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
    *   The entity type.

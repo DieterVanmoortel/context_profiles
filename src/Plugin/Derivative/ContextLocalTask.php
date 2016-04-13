@@ -59,26 +59,15 @@ class ContextLocalTask extends DeriverBase implements ContainerDeriverInterface 
 
     foreach ($this->entityManager->getDefinitions() as $entity_type_id => $entity_type) {
 
-      $has_edit_path = $entity_type->hasLinkTemplate('block-load');
-
-      if ($has_edit_path) {
+      if ($entity_type->hasLinkTemplate('context-profile')) {
 
         $this->derivatives["$entity_type_id.block_tab"] = array(
-          'route_name' => "entity.$entity_type_id." . 'block-load',
-          'title' => $this->t('Blocken'),
-          'base_route' => "entity.$entity_type_id." .  "edit_form",
+          'route_name' => "entity.$entity_type_id.context_profile",
+          'title' => $this->t('Blocks'),
+          'base_route' => "entity.$entity_type_id.canonical",
           'weight' => 100,
         );
 
-
-        if ($has_edit_path) {
-          $this->derivatives["$entity_type_id.block_tab"] = array(
-            'route_name' => "entity.$entity_type_id.block_load",
-            'weight' => 100,
-            'title' => $this->t('Load'),
-            'parent_id' => "devel.entities:$entity_type_id.devel_tab",
-          );
-        }
       }
     }
 
