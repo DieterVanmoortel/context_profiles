@@ -45,15 +45,15 @@ before_script:
   # Create database.
   - mysql -e 'create database drupal'
 
-  # Create new website
-  - php -d sendmail_path=`which true` ~/.composer/vendor/bin/drush.php --yes core-quick-drupal --profile=testing --no-server --db-url=mysql://root:@127.0.0.1/drupal --enable=simpletest context_profiles
-
   # Export database variable for kernel tests.
   - export SIMPLETEST_DB=mysql://root:@127.0.0.1/drupal
 
   # Download Drupal 8 core.
   - travis_retry git clone --branch 8.0.x --depth 1 http://git.drupal.org/project/drupal.git
   - cd drupal
+
+  # Create new site
+  drush --yes site-install standard --db-url=mysql://root:@127.0.0.1/drupal install_configure_form.update_status_module='array(FALSE,FALSE)'
 
   # Reference context_profiles in build site.
   - ln -s $TESTDIR modules/context_profiles
