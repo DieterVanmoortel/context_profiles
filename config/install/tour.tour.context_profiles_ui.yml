@@ -27,7 +27,7 @@ tips:
     plugin: text
     body: 'Here are all available blocks. You can simply click a block and drag it to a region on the right side.'
     weight: 3
-    location: top
+    location: right
     attributes:
       data-id: edit-disabled
   edit_regions:
@@ -35,7 +35,7 @@ tips:
     plugin: text
     body: 'This zone shows all regions. Some regions might have restrictions and are not available to drop blocks.'
     weight: 4
-    location: top
+    location: left
     attributes:
       data-id: edit-regions
   grey_blocks:
