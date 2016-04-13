@@ -1,0 +1,59 @@
+id: context_profiles_ui
+module: context_profiles
+label: 'Drag and drop blocks in organized contexts'
+langcode: en
+routes:
+  - route_name: entity.node.context_profile
+  - route_name: entity.user.context_profile
+  - route_name: entity.taxonomy_term.context_profile
+  - route_name: context_profiles.settings
+tips:
+  introduction:
+    id: introduction
+    plugin: text
+    location: top
+    label: 'Welcome'
+    body: 'This tour will show you how to organise blocks on a page.'
+    weight: 0
+  active_contexts:
+    id: active_contexts
+    plugin: text
+    body: 'Here you can find all active contexts. You can either edit the current context or switch to another by clicking it. Contexts that can not be editted are marked with a color, so you can link them to blocks.'
+    weight: 2
+    attributes:
+      data-id: edit-active-contexts
+  edit-disabled:
+    id: edit-disabled
+    plugin: text
+    body: 'Here are all available blocks. You can simply click a block and drag it to a region on the right side.'
+    weight: 3
+    location: top
+    attributes:
+      data-id: edit-disabled
+  edit_regions:
+    id: edit_regions
+    plugin: text
+    body: 'This zone shows all regions. Some regions might have restrictions and are not available to drop blocks.'
+    weight: 4
+    location: top
+    attributes:
+      data-id: edit-regions
+  grey_blocks:
+    id: grey_blocks
+    plugin: text
+    body: 'Greyed out blocks can not be dragged to another region.'
+    weight: 5
+  placed_blocks:
+    id: placed_blocks
+    plugin: text
+    body: 'Blocks in regions that have an X can be removed from context. Removing a block will return it to the block list on the left.'
+    weight: 6
+  submit_button:
+    id: submit_button
+    plugin: text
+    weight: 99
+    label: 'Finish'
+    body: "Finish editting and store this context's configuration."
+    location: top
+    attributes:
+      data-id: edit-submit
