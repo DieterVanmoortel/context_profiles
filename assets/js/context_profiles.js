@@ -57,7 +57,7 @@
           ui.draggable.find('.block-region').attr('value', '');
         }
       }).sortable({
-        items: ".draggable-block, .sortable-block"
+        items: ".block-form"
       });
 
       $('.reset-block').on('click', function(e) {
@@ -76,20 +76,9 @@
     },
     adjustBlockWeights: function( region ) {
       var index = -10;
-      var draggable = true;
       region.find('.block-weight').each(function() {
-        if($(this).parents('.block-form').hasClass('draggable-block')) {
-          $(this).val(index);
-          index++;
-          draggable = true;
-        }
-        else{
-          index = $(this).val();
-          if (!draggable) {
-            index++;
-          }
-          draggable = false;
-        }
+        $(this).val(index);
+        index++;
       })
     }
   };

@@ -51,12 +51,11 @@
     position: relative;
 }
 
-
 .draggable-block {
     background-color: #5ad2fa;
 }
 .sortable-block {
-    background-color: grey;
+    background-color: #f2f2f2;
 }
 .draggable-block:hover {
     background-color: #ff8c46;
@@ -82,15 +81,31 @@
     clear: both;
 }
 
-.context-1 {border-left:4px solid red !important;}
-.context-2 {border-left:4px solid green !important;}
-.context-3 {border-left:4px solid blue !important;}
-.context-4 {border-left:4px solid yellow !important;}
+.sortable-block:after{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    content: 'o';
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    font-size:0;
+}
 
+.button--secondary.context-0 {box-shadow: 3px 3px 2px orange;}
+.button--secondary.context-1 {box-shadow: 3px 3px 2px red;}
+.button--secondary.context-2 {box-shadow: 3px 3px 2px green;}
+.button--secondary.context-3 {box-shadow: 3px 3px 2px blue;}
+.button--secondary.context-4 {box-shadow: 3px 3px 2px yellow;}
 
-
-
-
+.sortable-block.context-0:after {background-color: orange !important;}
+.sortable-block.context-1:after {background-color: red !important;}
+.sortable-block.context-2:after {background-color: green !important;}
+.sortable-block.context-3:after {background-color: blue !important;}
+.sortable-block.context-4:after {background-color: yellow !important;}
 
 .form-type-select{
     /*display:block !important;*/
