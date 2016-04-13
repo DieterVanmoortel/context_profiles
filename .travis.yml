@@ -53,7 +53,7 @@ before_script:
   - cd drupal
 
   # Create new site
-  drush --yes site-install standard --db-url=mysql://root:@127.0.0.1/drupal install_configure_form.update_status_module='array(FALSE,FALSE)'
+  - drush --yes site-install standard --db-url=mysql://root:@127.0.0.1/drupal install_configure_form.update_status_module='array(FALSE,FALSE)'
 
   # Reference context_profiles in build site.
   - ln -s $TESTDIR modules/context_profiles
