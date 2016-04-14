@@ -3,8 +3,6 @@ context_profiles:
   js:
     assets/js/context_profiles.js: {}
   css:
-    component:
-      assets/vendor/jquery.ui/themes/base/dialog.css: {}
     theme:
       assets/css/context_profiles.css: {}
       assets/css/bartik.css: {}

@@ -29,20 +29,6 @@
         }
       });
 
-      $('.sortable-block').draggable({
-        appendTo: "#edit-regions",
-        connectToSortable: ".region-droppable",
-        containment: "parent",
-        stop: function( event, ui ) {
-          var region = $(this).parents('.region-droppable');
-          Drupal.behaviors.contextProfiles.adjustBlockWeights(region);
-        }
-      });
-
-      $('.region-disabled').sortable({
-        items: ".block-form"
-      });
-
       $('.region-droppable').droppable({
         addClasses: false,
         tolerance: "pointer",
@@ -57,7 +43,8 @@
           ui.draggable.find('.block-region').attr('value', '');
         }
       }).sortable({
-        items: ".block-form"
+        items: ".block-form",
+        cancel: '.sortable-block'
       });
 
       $('.reset-block').on('click', function(e) {
@@ -66,6 +53,19 @@
         var parent = $('#edit-disabled').find('#wrap-' + plugin);
         Drupal.behaviors.contextProfiles.moveBlock($(this).parent(), parent);
       });
+
+      $( "#edit-block-lookup" ).keyup(function() {
+        var lookup = $('#edit-block-lookup').val().toLowerCase();
+        $.each($('#edit-disabled').find('.block-form'), function(){
+          if ($(this).find('label').html().toLowerCase().search(lookup) > -1) {
+            $(this).fadeIn();
+          }
+          else {
+            $(this).fadeOut();
+          }
+        });
+      });
+
     },
     moveBlock: function ( $item , $parent) {
       $item.fadeOut(200, function() {

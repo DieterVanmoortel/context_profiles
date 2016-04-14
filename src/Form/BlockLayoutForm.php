@@ -122,6 +122,11 @@ class BlockLayoutForm extends BlockFormBase {
       '#type' => 'fieldset',
       '#title' => t('Available Blocks'),
     );
+
+    $form['disabled']['block-lookup'] = array(
+      '#type' => 'textfield',
+      '#placeholder' => 'Find blocks',
+    );
     $form['disabled']['add'] = array(
       '#type' => 'link',
       '#url' => Url::fromRoute('block_content.add_page'),
@@ -285,29 +290,26 @@ class BlockLayoutForm extends BlockFormBase {
     foreach ($active_contexts as $context_id) {
       $context = Context::load($context_id);
       $reaction = $context->getReaction('blocks');
-
       $blocks = $form_state->getValue('blocks');
       // Loop all plugins and add or remove from context.
       foreach ($blocks as $id => $block) {
-        $newblock = !isset($block['context']) && $current == $context_id;
+        $new_block = !isset($block['context']) && $current == $context_id;
         $update_existing_block = isset($block['context']) && $block['context'] == $context_id;
 
-        if ($newblock || $update_existing_block) {
-
+        if ($new_block || $update_existing_block) {
           $configuration = $form_state->getValue($id);
           if (!empty($configuration['region'])) {
-            // Add/Update the block.
-            if (!isset($block['config'])) {
+            if (isset($block['config'])) { // Update existing block.
+              $reaction->updateBlock($block['config']['uuid'], $configuration);
+            }
+            else { // Add new block.
               $configuration += $block;
               $configuration['id'] = $id;
               $configuration['theme'] = $this->themeHandler->getDefault();
               $reaction->addBlock($configuration);
             }
-            else {
-              $reaction->updateBlock($block['config']['uuid'], $configuration);
-            }
           }
-          elseif (isset($block['config'])) {
+          elseif (isset($block['config'])) { // Remove existing blocks.
             $reaction->removeBlock($block['config']['uuid']);
           }
         }
