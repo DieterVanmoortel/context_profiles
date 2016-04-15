@@ -1,164 +1,160 @@
 /* DISABLED BLOCKS REGION */
 #edit-disabled {
-    width: 480px;
-    display: block;
+  width: 480px;
+  display: block;
 }
 
 #edit-disabled .block-placeholder {
-    padding: 0;
-    margin: 0;
-    display: inline;
+  padding: 0;
+  margin: 0;
+  display: inline;
 }
 
 #edit-disabled .disabled-provider {
-    display: none;
+  display: none;
 }
 
 #edit-disabled .form-provider {
-    padding: 32px 8px 8px;
+  padding: 32px 8px 8px;
 }
 
 /* REGIONS ZONE */
 #edit-regions {
-    display: block;
-    position: absolute;
-    width: 220px;
-    left: 530px;
-    right: 0;
-    margin-top: 0;
+  display: block;
+  position: absolute;
+  width: 220px;
+  left: 530px;
+  right: 0;
+  margin-top: 0;
 }
 
 #edit-regions fieldset {
-    background-color: #e8e8e8;
+  background-color: #e8e8e8;
 }
 
 #edit-regions .region-droppable {
-    padding: 32px 8px 8px;
-    background-color: white;
-    min-height: 45px;
+  padding: 32px 8px 8px;
+  background-color: white;
+  min-height: 45px;
 }
 
 #edit-regions .region-droppable.region-active {
-    background-color: #5ad2aa;
+  background-color: #5ad2aa;
 }
 
 #edit-regions .region-disabled {
-    padding: 32px 8px 8px;
+  padding: 32px 8px 8px;
 }
 
 #edit-regions .block-form.draggable-block .reset-block {
-    display: block;
+  display: block;
 }
 
 /* DRAGGABLE BLOCKS */
 .block-form {
-    padding: 4px 8px;
-    margin: 4px;
-    width: 200px;
-    display: inline-block;
-    border-radius: 2px;
-    position: relative;
+  padding: 4px 8px;
+  margin: 4px;
+  width: 200px;
+  display: inline-block;
+  border-radius: 2px;
+  position: relative;
 }
 
 .draggable-block {
-    background-color: #5ad2fa;
+  background-color: #5ad2fa;
 }
 
 .sortable-block {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
 
 .draggable-block:hover {
-    background-color: #ff8c46;
-    color: #ffffff;
+  background-color: #ff8c46;
+  color: #ffffff;
 }
 
 .block-form .form-item {
-    display: none;
+  display: none;
 }
 
 .block-form .reset-block {
-    display: none;
+  display: none;
 }
 
 .draggable-block.block-form .reset-block {
-    position: absolute;
-    top: 6px;
-    right: 8px;
+  position: absolute;
+  top: 6px;
+  right: 8px;
 }
 
 .draggable-block .reset-block:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* REMAINING FORM ELEMENTS */
 .form-actions {
-    clear: both;
+  clear: both;
 }
 
 .sortable-block:after {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    content: 'o';
-    width: 10px;
-    height: 10px;
-    background-color: white;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    font-size: 0;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  content: 'o';
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  font-size: 0;
 }
 
 /* Disable clicks on active context button */
 #edit-active-contexts .button--primary {
-    pointer-events: none;
+  pointer-events: none;
 }
 
 #edit-active-contexts .button:first-child {
-    margin-right: 1em;
+  margin-right: 1em;
 }
 
 .button--secondary.context-0 {
-    box-shadow: 3px 3px 2px orange;
+  box-shadow: 3px 3px 2px orange;
 }
 
 .button--secondary.context-1 {
-    box-shadow: 3px 3px 2px red;
+  box-shadow: 3px 3px 2px red;
 }
 
 .button--secondary.context-2 {
-    box-shadow: 3px 3px 2px green;
+  box-shadow: 3px 3px 2px green;
 }
 
 .button--secondary.context-3 {
-    box-shadow: 3px 3px 2px blue;
+  box-shadow: 3px 3px 2px blue;
 }
 
 .button--secondary.context-4 {
-    box-shadow: 3px 3px 2px yellow;
+  box-shadow: 3px 3px 2px yellow;
 }
 
 .sortable-block.context-0:after {
-    background-color: orange !important;
+  background-color: orange !important;
 }
 
 .sortable-block.context-1:after {
-    background-color: red !important;
+  background-color: red !important;
 }
 
 .sortable-block.context-2:after {
-    background-color: green !important;
+  background-color: green !important;
 }
 
 .sortable-block.context-3:after {
-    background-color: blue !important;
+  background-color: blue !important;
 }
 
 .sortable-block.context-4:after {
-    background-color: yellow !important;
-}
-
-.form-type-select {
-    /*display:block !important;*/
+  background-color: yellow !important;
 }
