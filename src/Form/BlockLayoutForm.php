@@ -137,7 +137,7 @@ class BlockLayoutForm extends BlockFormBase {
       '#placeholder' => 'Find blocks',
     );
 
-    // TODO : Move this to local action
+    // TODO : Move this to local action.
     $form['disabled']['add'] = array(
       '#type' => 'link',
       '#url' => Url::fromRoute('block_content.add_page'),
@@ -152,7 +152,7 @@ class BlockLayoutForm extends BlockFormBase {
         '#attributes' => array(
           'class' => $region['classes'],
           'id' => $region_id,
-        )
+        ),
       );
     }
 
@@ -187,7 +187,7 @@ class BlockLayoutForm extends BlockFormBase {
 
       if (!isset($form['disabled'][$entity['provider']])) {
         $class = isset($provider_config[$entity['provider']]) ? 'form-provider' : 'disabled-provider';
-        // Add provider to disabled region
+        // Add provider to disabled region.
         $form['disabled'][$entity['provider']] = array(
           '#type' => 'fieldset',
           '#title' => $entity['provider'],
@@ -197,13 +197,13 @@ class BlockLayoutForm extends BlockFormBase {
         );
       }
 
-      // Add placeholder in disabled region
+      // Add placeholder in disabled region.
       $form['disabled'][$entity['provider']]['wrap-' . $index] = array(
         '#type' => 'container',
         '#attributes' => array(
           'class' => array('block-placeholder'),
-          'id' => 'wrap-' . $index
-        )
+          'id' => 'wrap-' . $index,
+        ),
       );
 
       if (isset($entity['config'])) {
@@ -338,7 +338,7 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Get or set entity specific context.
    *
-   * @param stdClass $entity
+   * @param object $entity
    * @param string $type
    *
    * @return Context

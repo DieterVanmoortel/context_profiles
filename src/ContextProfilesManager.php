@@ -84,6 +84,7 @@ class ContextProfilesManager extends PluginBase {
    * Return config options for all assigned roles.
    *
    * @param array $config
+   *
    * @return array
    */
   private function mergeConfigRoles($config) {
@@ -141,7 +142,7 @@ class ContextProfilesManager extends PluginBase {
       $regions[$id]['classes'][] = $id;
     }
 
-    // TODO : Add an alter for other modules
+    // TODO : Add an alter for other modules.
     return $regions;
   }
 
@@ -160,7 +161,7 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * Get all block definitions
+   * Get all block definitions.
    *
    * @return array
    */
@@ -171,7 +172,7 @@ class ContextProfilesManager extends PluginBase {
     // Order by category, and then by admin label.
     $blocks = $this->blockManager->getSortedDefinitions($blocks);
 
-    // TODO : Add an alter for other modules
+    // TODO : Add an alter for other modules.
     return $blocks;
   }
 
@@ -208,4 +209,5 @@ class ContextProfilesManager extends PluginBase {
 
     return $classes;
   }
+
 }

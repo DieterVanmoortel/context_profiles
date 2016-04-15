@@ -3,8 +3,10 @@
 namespace Drupal\context_profiles\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\context_profiles\ContextProfile;
 
+/**
+ * Defines ProviderConfigForm class.
+ */
 class ProviderConfigForm extends BaseConfigForm {
 
   /**
@@ -15,12 +17,7 @@ class ProviderConfigForm extends BaseConfigForm {
   }
 
   /**
-   * Build form.
-   *
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *
-   * @return array
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
@@ -59,8 +56,8 @@ class ProviderConfigForm extends BaseConfigForm {
           '#attributes' => array(
             'class' => array(
               'rid-' . $rid,
-              'js-rid-' . $rid
-            )
+              'js-rid-' . $rid,
+            ),
           ),
           '#parents' => array($rid, $provider),
         );
@@ -78,10 +75,7 @@ class ProviderConfigForm extends BaseConfigForm {
   }
 
   /**
-   * Form Submission handler.
-   *
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     foreach ($form_state->getValue('user_roles') as $rid => $name) {

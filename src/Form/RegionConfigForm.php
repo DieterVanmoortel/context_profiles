@@ -3,7 +3,6 @@
 namespace Drupal\context_profiles\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\context_profiles\ContextProfile;
 
 /**
  * Defines RegionConfigForm Class.
@@ -26,7 +25,7 @@ class RegionConfigForm extends BaseConfigForm {
 
     $user_roles = $form['user_roles']['#value'];
 
-    //TODO : Implement ContextProfilesManager.
+    // TODO : Implement ContextProfilesManager.
     $theme_handler = \Drupal::service('theme_handler');
     $theme_name = $theme_handler->getDefault();
     $theme = $theme_handler->getTheme($theme_name);
