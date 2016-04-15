@@ -1,27 +1,32 @@
 <?php
-/**
- * @file
- * Contains \Drupal\context_profiles\Form\RegionConfigForm
- */
 
 namespace Drupal\context_profiles\Form;
 
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\node\NodeInterface;
 use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
 use Drupal\context\Entity\Context;
-use Drupal\context_profiles\ContextProfilesManager;
 use Drupal\Core\Routing\RouteMatchInterface;
 
+/**
+ * Defines BlockLayoutForm Class.
+ */
 class BlockLayoutForm extends BlockFormBase {
 
+  /**
+   * @var
+   */
   private $contextProfileManager;
 
+  /**
+   * @var Context
+   */
   private $current;
 
+  /**
+   * @var array
+   */
   private $activeContexts;
-
 
   /**
    * @inheritDoc
@@ -48,7 +53,9 @@ class BlockLayoutForm extends BlockFormBase {
   }
 
   /**
-   * @return array
+   * Create a the Acctive Context Switcher Form.
+   *
+   * @return array $form
    */
   private function createActiveContextsForm() {
     $form = array(
@@ -62,7 +69,9 @@ class BlockLayoutForm extends BlockFormBase {
         '#value' => $context->label(),
         '#button_type' => $this->current->id() === $context->id() ? 'primary' : 'secondary',
         '#context' => $context->id(),
-        '#attributes' => array('class' => array('context-' . $index))
+        '#attributes' => array(
+          'class' => array('context-' . $index),
+        ),
       );
       $contexts[] = $context->id();
       $index++;
@@ -127,6 +136,8 @@ class BlockLayoutForm extends BlockFormBase {
       '#type' => 'textfield',
       '#placeholder' => 'Find blocks',
     );
+
+    // TODO : Move this to local action
     $form['disabled']['add'] = array(
       '#type' => 'link',
       '#url' => Url::fromRoute('block_content.add_page'),
@@ -153,7 +164,7 @@ class BlockLayoutForm extends BlockFormBase {
       $reactions = $context->get('reactions');
       $blocks = isset($reactions['blocks']['blocks']) ? $reactions['blocks']['blocks'] : array();
 
-      foreach ((array) $blocks as $uuid => $config_block) {
+      foreach ((array) $blocks as $config_block) {
         $available_blocks[$config_block['id']]['config'] = $config_block;
         $available_blocks[$config_block['id']]['context'] = $context_id;
         $available_blocks[$config_block['id']]['active'] = ($context_id == $this->current->id());
@@ -172,7 +183,7 @@ class BlockLayoutForm extends BlockFormBase {
     $index = 0;
     foreach ($available_blocks as $id => $entity) {
       // Create subform.
-      $block_form = $this->buildBlockForm($entity, $index);
+      $block_form = $this->prepareBlock($entity, $index);
 
       if (!isset($form['disabled'][$entity['provider']])) {
         $class = isset($provider_config[$entity['provider']]) ? 'form-provider' : 'disabled-provider';
@@ -219,12 +230,12 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Create a draggable block subform.
    *
-   * @param $entity
-   * @param $index
+   * @param array $entity
+   * @param int $index
    *
    * @return array
    */
-  private function buildBlockForm($entity, $index) {
+  protected function prepareBlock($entity, $index = 0) {
 
     // Create new field.
     $block_form = array(
@@ -281,6 +292,8 @@ class BlockLayoutForm extends BlockFormBase {
 
 
   /**
+   * Form Submission handler.
+   *
    * @param array $form
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    */
@@ -299,17 +312,20 @@ class BlockLayoutForm extends BlockFormBase {
         if ($new_block || $update_existing_block) {
           $configuration = $form_state->getValue($id);
           if (!empty($configuration['region'])) {
-            if (isset($block['config'])) { // Update existing block.
+            if (isset($block['config'])) {
+              // Update existing block.
               $reaction->updateBlock($block['config']['uuid'], $configuration);
             }
-            else { // Add new block.
+            else {
+              // Add new block.
               $configuration += $block;
               $configuration['id'] = $id;
               $configuration['theme'] = $this->themeHandler->getDefault();
               $reaction->addBlock($configuration);
             }
           }
-          elseif (isset($block['config'])) { // Remove existing blocks.
+          elseif (isset($block['config'])) {
+            // Remove existing blocks.
             $reaction->removeBlock($block['config']['uuid']);
           }
         }
@@ -319,18 +335,10 @@ class BlockLayoutForm extends BlockFormBase {
     } // end contexts loop
   }
 
-
-  /**
-   * @inheritDoc
-   */
-  protected function prepareBlock($configuration) {
-    return $configuration;
-  }
-
   /**
    * Get or set entity specific context.
    *
-   * @param /stdClass $entity
+   * @param stdClass $entity
    * @param string $type
    *
    * @return Context
@@ -376,4 +384,3 @@ class BlockLayoutForm extends BlockFormBase {
   }
 
 }
-

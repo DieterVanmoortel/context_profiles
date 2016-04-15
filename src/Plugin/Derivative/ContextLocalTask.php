@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\devel\Plugin\Derivative\DevelLocalTask.
- */
-
 namespace Drupal\context_profiles\Plugin\Derivative;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;

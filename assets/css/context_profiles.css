@@ -3,42 +3,51 @@
     width: 480px;
     display: block;
 }
+
 #edit-disabled .block-placeholder {
-    padding:0;
-    margin:0;
+    padding: 0;
+    margin: 0;
     display: inline;
 }
 
-#edit-disabled .disabled-provider{
-    display:none;
+#edit-disabled .disabled-provider {
+    display: none;
 }
+
 #edit-disabled .form-provider {
     padding: 32px 8px 8px;
 }
+
 /* REGIONS ZONE */
 #edit-regions {
     display: block;
     position: absolute;
+    width: 220px;
     left: 530px;
     right: 0;
     margin-top: 0;
 }
+
 #edit-regions fieldset {
     background-color: #e8e8e8;
 }
-#edit-regions .region-droppable{
+
+#edit-regions .region-droppable {
     padding: 32px 8px 8px;
     background-color: white;
     min-height: 45px;
 }
-#edit-regions .region-droppable.region-active{
+
+#edit-regions .region-droppable.region-active {
     background-color: #5ad2aa;
 }
+
 #edit-regions .region-disabled {
     padding: 32px 8px 8px;
 }
-#edit-regions .block-form.draggable-block .reset-block{
-    display:block;
+
+#edit-regions .block-form.draggable-block .reset-block {
+    display: block;
 }
 
 /* DRAGGABLE BLOCKS */
@@ -54,24 +63,30 @@
 .draggable-block {
     background-color: #5ad2fa;
 }
+
 .sortable-block {
     background-color: #f2f2f2;
 }
+
 .draggable-block:hover {
     background-color: #ff8c46;
     color: #ffffff;
 }
-.block-form .form-item{
+
+.block-form .form-item {
     display: none;
 }
+
 .block-form .reset-block {
     display: none;
 }
+
 .draggable-block.block-form .reset-block {
     position: absolute;
     top: 6px;
     right: 8px;
 }
+
 .draggable-block .reset-block:hover {
     cursor: pointer;
 }
@@ -81,7 +96,7 @@
     clear: both;
 }
 
-.sortable-block:after{
+.sortable-block:after {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -92,21 +107,58 @@
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
-    font-size:0;
+    font-size: 0;
 }
 
-.button--secondary.context-0 {box-shadow: 3px 3px 2px orange;}
-.button--secondary.context-1 {box-shadow: 3px 3px 2px red;}
-.button--secondary.context-2 {box-shadow: 3px 3px 2px green;}
-.button--secondary.context-3 {box-shadow: 3px 3px 2px blue;}
-.button--secondary.context-4 {box-shadow: 3px 3px 2px yellow;}
+/* Disable clicks on active context button */
+#edit-active-contexts .button--primary {
+    pointer-events: none;
+}
 
-.sortable-block.context-0:after {background-color: orange !important;}
-.sortable-block.context-1:after {background-color: red !important;}
-.sortable-block.context-2:after {background-color: green !important;}
-.sortable-block.context-3:after {background-color: blue !important;}
-.sortable-block.context-4:after {background-color: yellow !important;}
+#edit-active-contexts .button:first-child {
+    margin-right: 1em;
+}
 
-.form-type-select{
+.button--secondary.context-0 {
+    box-shadow: 3px 3px 2px orange;
+}
+
+.button--secondary.context-1 {
+    box-shadow: 3px 3px 2px red;
+}
+
+.button--secondary.context-2 {
+    box-shadow: 3px 3px 2px green;
+}
+
+.button--secondary.context-3 {
+    box-shadow: 3px 3px 2px blue;
+}
+
+.button--secondary.context-4 {
+    box-shadow: 3px 3px 2px yellow;
+}
+
+.sortable-block.context-0:after {
+    background-color: orange !important;
+}
+
+.sortable-block.context-1:after {
+    background-color: red !important;
+}
+
+.sortable-block.context-2:after {
+    background-color: green !important;
+}
+
+.sortable-block.context-3:after {
+    background-color: blue !important;
+}
+
+.sortable-block.context-4:after {
+    background-color: yellow !important;
+}
+
+.form-type-select {
     /*display:block !important;*/
 }

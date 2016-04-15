@@ -142,7 +142,6 @@ class ContextProfilesManager extends PluginBase {
     }
 
     // TODO : Add an alter for other modules
-
     return $regions;
   }
 
@@ -173,7 +172,6 @@ class ContextProfilesManager extends PluginBase {
     $blocks = $this->blockManager->getSortedDefinitions($blocks);
 
     // TODO : Add an alter for other modules
-
     return $blocks;
   }
 

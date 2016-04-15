@@ -55,7 +55,7 @@
         Drupal.behaviors.contextProfiles.moveBlock($(this).parent(), parent);
       });
 
-      $("#edit-block-lookup").keyup(function () {
+      $('#edit-block-lookup').keyup(function () {
         var lookup = $('#edit-block-lookup').val().toLowerCase();
         $.each($('#edit-disabled').find('.block-form'), function () {
           if ($(this).find('label').html().toLowerCase().search(lookup) > -1) {
@@ -80,7 +80,7 @@
       region.find('.block-weight').each(function () {
         $(this).val(index);
         index++;
-      })
+      });
     }
   };
 
