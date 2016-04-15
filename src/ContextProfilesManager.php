@@ -8,6 +8,7 @@ use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\context\ContextManager;
+use Drupal\Core\Updater\Theme;
 
 /**
  * Defines ContextProfilesManager Class.
@@ -42,19 +43,22 @@ class ContextProfilesManager extends PluginBase {
    * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
    */
   function __construct(
-    ThemeHandlerInterface $themeHandler,
-    ContextManager $contextManager,
-    BlockManagerInterface $blockManager,
-    ContextReactionManager $contextReactionManager
+    ThemeHandlerInterface $theme_handler,
+    ContextManager $context_manager,
+    BlockManagerInterface $block_manager,
+    ContextReactionManager $context_reaction_manager
   ) {
-    $this->themeHandler = $themeHandler;
-    $this->contextManager = $contextManager;
-    $this->blockManager = $blockManager;
-    $this->contextReactionManager = $contextReactionManager;
+    $this->themeHandler = $theme_handler;
+    $this->contextManager = $context_manager;
+    $this->blockManager = $block_manager;
+    $this->contextReactionManager = $context_reaction_manager;
   }
 
   /**
-   * @return theme
+   * Returns the current Theme.
+   *
+   * @return Theme
+   *  Current Theme.
    */
   private function getTheme() {
     return $this->themeHandler->getTheme($this->themeHandler->getDefault());
@@ -66,6 +70,7 @@ class ContextProfilesManager extends PluginBase {
    * @param string $type
    *
    * @return ContextReactionInterface
+   *  New instance.
    */
   public function createReactionInstance($type) {
     return $this->contextReactionManager->createInstance($type);
@@ -73,6 +78,9 @@ class ContextProfilesManager extends PluginBase {
 
   /**
    * Get Roles for the current user.
+   *
+   * @return array
+   *  Roles for current user.
    */
   private function getUserRoles() {
     $account = \Drupal::currentUser();
@@ -86,6 +94,7 @@ class ContextProfilesManager extends PluginBase {
    * @param array $config
    *
    * @return array
+   *  Merged roles.
    */
   private function mergeConfigRoles($config) {
     $roles = $this->getUserRoles();
@@ -101,6 +110,7 @@ class ContextProfilesManager extends PluginBase {
 
   /**
    * @return ProviderConfig
+   *  Provider Configuration.
    */
   public function getProviderConfig() {
     if (!isset($this->providerConfig)) {
@@ -113,6 +123,8 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
+   * Returns the region configuration.
+   *
    * @return array
    */
   private function getRegionConfig() {
@@ -150,6 +162,7 @@ class ContextProfilesManager extends PluginBase {
    * Get all active contexts.
    *
    * @return array
+   *  Active contexts.
    */
   public function getActiveContexts() {
     $unkeyed_contexts = $this->contextManager->getActiveContexts();
@@ -164,6 +177,7 @@ class ContextProfilesManager extends PluginBase {
    * Get all block definitions.
    *
    * @return array
+   *  Available blocks.
    */
   public function getAvailableBlockDefinitions() {
     // Only add blocks which work without any available context.

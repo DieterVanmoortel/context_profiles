@@ -8,9 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\ContentEntityType;
 
 /**
- * Implements hook_preprocess_page.
- *
- * @param $variables
+ * Implements hook_preprocess_page().
  */
 function context_profiles_preprocess_page(&$variables) {
   if (\Drupal::routeMatch()->getRouteObject()->getOption('_context_profiles_entity_type_id')) {
@@ -23,7 +21,7 @@ function context_profiles_preprocess_page(&$variables) {
  * Implements hook_entity_type_alter().
  */
 function context_profiles_entity_type_alter(array &$entity_types) {
-  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
   foreach ($entity_types as $entity_type_id => $entity_type) {
     // Only add links to content entities.
     if ($entity_type instanceof ContentEntityType) {

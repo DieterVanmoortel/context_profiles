@@ -2,6 +2,8 @@
 
 namespace Drupal\context_profiles\Form;
 
+use Drupal\context_profiles\ContextProfilesManager;
+use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
@@ -14,7 +16,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 class BlockLayoutForm extends BlockFormBase {
 
   /**
-   * @var
+   * @var ContextProfilesManager
    */
   private $contextProfileManager;
 
@@ -36,7 +38,7 @@ class BlockLayoutForm extends BlockFormBase {
   }
 
   /**
-   * @return mixed
+   * @return ContextProfilesManager
    */
   private function getContextProfileManager() {
     if (!isset($this->contextProfileManager)) {
@@ -89,11 +91,12 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Build form.
    *
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * @param \Drupal\node\NodeInterface|NULL $node
+   * @param FormInterface $form
+   * @param FormStateInterface $form_state
+   * @param RouteMatchInterface $route_match
    *
    * @return array
+   *  returns a renderable form.
    */
   public function buildForm(array $form, FormStateInterface $form_state, RouteMatchInterface $route_match = NULL) {
 

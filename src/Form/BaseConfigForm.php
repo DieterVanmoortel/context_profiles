@@ -22,6 +22,7 @@ abstract class BaseConfigForm extends UserPermissionsForm {
     if (!isset($this->contextProfileManager)) {
       $this->contextProfileManager = \Drupal::service('context_profiles.manager');
     }
+
     return $this->contextProfileManager;
   }
 
@@ -29,8 +30,6 @@ abstract class BaseConfigForm extends UserPermissionsForm {
    * Build the roles header row form.
    *
    * @param array $form
-   *
-   * @return array
    */
   public function buildRolesHeaderForm(&$form) {
 
@@ -60,8 +59,6 @@ abstract class BaseConfigForm extends UserPermissionsForm {
         'class' => array('checkbox'),
       );
     }
-
-    return $form;
   }
 
 }
