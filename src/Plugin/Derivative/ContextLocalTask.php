@@ -17,7 +17,7 @@ class ContextLocalTask extends DeriverBase implements ContainerDeriverInterface 
   use StringTranslationTrait;
 
   /**
-   * The entity manager
+   * The entity manager.
    *
    * @var \Drupal\Core\Entity\EntityManagerInterface
    */

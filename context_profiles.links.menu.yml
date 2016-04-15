@@ -16,4 +16,3 @@ context_profiles.settings.providers:
   description: 'Select which block providers are available on a role base.'
   parent: context_profiles.settings
   route_name: context_profiles.settings.providers
-

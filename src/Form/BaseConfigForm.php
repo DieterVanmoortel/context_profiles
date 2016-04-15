@@ -1,19 +1,22 @@
 <?php
-/**
- * @file
- * Contains \Drupal\context_profiles\Form\RegionConfigForm
- */
 
 namespace Drupal\context_profiles\Form;
 
+use Drupal\context_profiles\ContextProfilesManager;
 use Drupal\user\Form\UserPermissionsForm;
 
+/**
+ * Defines BaseConfigForm Class.
+ */
 abstract class BaseConfigForm extends UserPermissionsForm {
 
+  /**
+   * @var ContextProfilesManager
+   */
   private $contextProfileManager;
 
   /**
-   * @return mixed
+   * @return ContextProfilesManager
    */
   protected function getContextProfilesManager() {
     if (!isset($this->contextProfileManager)) {
@@ -23,8 +26,11 @@ abstract class BaseConfigForm extends UserPermissionsForm {
   }
 
   /**
-   * @param $form
-   * @return mixed
+   * Build the roles header row form.
+   *
+   * @param array $form
+   *
+   * @return array
    */
   public function buildRolesHeaderForm(&$form) {
 
@@ -44,7 +50,7 @@ abstract class BaseConfigForm extends UserPermissionsForm {
       '#attributes' => ['class' => ['roles', 'js-roles']],
       '#sticky' => TRUE,
     );
-    // Empty cell for aestethic purposes
+    // Empty cell for aestethic purposes.
     $form['rows']['#header'][] = array(
       'data' => '',
     );

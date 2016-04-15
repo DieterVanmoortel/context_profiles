@@ -1,7 +1,11 @@
 <?php
+/**
+ * @file
+ * Contains code for context_profiles.module.
+ */
 
 /**
- * Implements hook_preprocess_page
+ * Implements hook_preprocess_page().
  *
  * @param $variables
  */
@@ -16,7 +20,7 @@ function context_profiles_preprocess_page(&$variables) {
  * Implements hook_entity_type_alter().
  */
 function context_profiles_entity_type_alter(array &$entity_types) {
-  /** @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
+  /* @var $entity_types \Drupal\Core\Entity\EntityTypeInterface[] */
   foreach ($entity_types as $entity_type_id => $entity_type) {
     // Only add links to content entities.
     if ($entity_type instanceof \Drupal\Core\Entity\ContentEntityType) {
@@ -29,7 +33,7 @@ function context_profiles_entity_type_alter(array &$entity_types) {
 /**
  * Implements hook_entity_operation().
  */
-function context_profiles_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
+function context_profiles_entity_operation( EntityInterface $entity) {
   $operations = array();
   if (\Drupal::currentUser()->hasPermission('use context profile ui')) {
     if ($entity->hasLinkTemplate('context-profile')) {

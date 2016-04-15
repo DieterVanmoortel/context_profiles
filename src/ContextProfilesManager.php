@@ -2,25 +2,25 @@
 
 namespace Drupal\context_profiles;
 
-use Drupal\block\BlockPluginCollection;
 use Drupal\context\ContextReactionInterface;
 use Drupal\context\ContextReactionManager;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\context\ContextManager;
-use Drupal\user\Entity\User;
 
-
+/**
+ * Defines ContextProfilesManager Class.
+ */
 class ContextProfilesManager extends PluginBase {
 
   /**
-   * @var
+   * @var array
    */
   private $providerConfig;
 
   /**
-   * @var
+   * @var array
    */
   private $regionConfig;
 
@@ -54,6 +54,13 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
+   * @return theme
+   */
+  private function getTheme() {
+    return $this->themeHandler->getTheme($this->themeHandler->getDefault());
+  }
+
+  /**
    * Create new instance of Reaction.
    *
    * @param string $type
@@ -62,13 +69,6 @@ class ContextProfilesManager extends PluginBase {
    */
   public function createReactionInstance($type) {
     return $this->contextReactionManager->createInstance($type);
-  }
-
-  /**
-   * @return theme
-   */
-  private function getTheme() {
-    return $this->themeHandler->getTheme($this->themeHandler->getDefault());
   }
 
   /**

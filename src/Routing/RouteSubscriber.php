@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\devel\Routing\RouteSubscriber.
- */
-
 namespace Drupal\context_profiles\Routing;
 
 use Drupal\Core\Entity\EntityTypeInterface;
@@ -70,7 +65,7 @@ class RouteSubscriber extends RouteSubscriberBase {
         ])
         ->setOption('_context_profiles_entity_type_id', $entity_type_id)
         ->setOption('parameters', [
-          $entity_type_id => ['type' => 'entity:' . $entity_type_id]
+          $entity_type_id => ['type' => 'entity:' . $entity_type_id],
         ])
         ->setOption('_admin_route', TRUE);
 

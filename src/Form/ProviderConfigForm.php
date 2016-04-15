@@ -19,7 +19,7 @@ class ProviderConfigForm extends BaseConfigForm {
    *
    * @param array $form
    * @param \Drupal\Core\Form\FormStateInterface $form_state
-   * 
+   *
    * @return array
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
