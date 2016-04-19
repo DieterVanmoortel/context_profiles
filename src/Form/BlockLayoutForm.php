@@ -289,10 +289,18 @@ class BlockLayoutForm extends BlockFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $current = $form_state->getValue('current_context');
     $active_contexts = $form_state->getValue('active_contexts');
+    $blocks = $form_state->getValue('blocks');
+
     foreach ($active_contexts as $context_id) {
-      $context = Context::load($context_id);
-      $reaction = $context->getReaction('blocks');
-      $blocks = $form_state->getValue('blocks');
+      if ($context_id == $current) {
+        $context = $this->current;
+        $reaction = $this->reaction;
+      }
+      else {
+        $context = Context::load($context_id);
+        $reaction = $context->getReaction('blocks');
+      }
+
       // Loop all plugins and add or remove from context.
       foreach ($blocks as $id => $block) {
         $new_block = !isset($block['context']) && $current == $context_id;

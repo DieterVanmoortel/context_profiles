@@ -22,14 +22,14 @@ class ContextProfilesLocalAction extends DeriverBase implements ContainerDeriver
   use StringTranslationTrait;
 
   /**
-   * The entity manager
+   * The entity manager.
    *
    * @var \Drupal\Core\Entity\EntityManagerInterface
    */
   protected $entityManager;
 
   /**
-   * Constructs a FieldUiLocalAction object.
+   * Constructs a ContextProfilesLocalAction object.
    *
    * @param \Drupal\Core\Routing\RouteProviderInterface $route_provider
    *   The route provider to load routes by name.

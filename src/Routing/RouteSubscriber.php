@@ -45,7 +45,7 @@ class RouteSubscriber extends RouteSubscriberBase {
         $collection->add("$entity_type_id.block_add", $add_block_route);
         // Direct action link to the settings page.
         if (\Drupal::currentUser()->hasPermission('administer context profiles')) {
-            $collection->add("$entity_type_id.admin", $admin_route);
+          $collection->add("$entity_type_id.admin", $admin_route);
         }
       }
     }
