@@ -2,13 +2,11 @@
 
 namespace Drupal\context_profiles;
 
-use Drupal\context\ContextReactionInterface;
 use Drupal\context\ContextReactionManager;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\context\ContextManager;
-use Drupal\Core\Updater\Theme;
 
 /**
  * Defines ContextProfilesManager Class.
@@ -58,7 +56,7 @@ class ContextProfilesManager extends PluginBase {
    * Returns the current Theme.
    *
    * @return Theme
-   *  Current Theme.
+   *   Current Theme.
    */
   private function getTheme() {
     return $this->themeHandler->getTheme($this->themeHandler->getDefault());
@@ -70,7 +68,7 @@ class ContextProfilesManager extends PluginBase {
    * @param string $type
    *
    * @return ContextReactionInterface
-   *  New instance.
+   *   New instance.
    */
   public function createReactionInstance($type) {
     return $this->contextReactionManager->createInstance($type);
@@ -80,7 +78,7 @@ class ContextProfilesManager extends PluginBase {
    * Get Roles for the current user.
    *
    * @return array
-   *  Roles for current user.
+   *   Roles for current user.
    */
   private function getUserRoles() {
     $account = \Drupal::currentUser();
@@ -94,7 +92,7 @@ class ContextProfilesManager extends PluginBase {
    * @param array $config
    *
    * @return array
-   *  Merged roles.
+   *   Merged roles.
    */
   private function mergeConfigRoles($config) {
     $roles = $this->getUserRoles();
@@ -110,7 +108,7 @@ class ContextProfilesManager extends PluginBase {
 
   /**
    * @return ProviderConfig
-   *  Provider Configuration.
+   *   Provider Configuration.
    */
   public function getProviderConfig() {
     if (!isset($this->providerConfig)) {
@@ -165,6 +163,7 @@ class ContextProfilesManager extends PluginBase {
    *  Active contexts.
    */
   public function getActiveContexts() {
+    $contexts = array();
     $unkeyed_contexts = $this->contextManager->getActiveContexts();
     foreach ($unkeyed_contexts as $context) {
       $contexts[$context->id()] = $context;
@@ -196,6 +195,7 @@ class ContextProfilesManager extends PluginBase {
    * @param $entity
    *
    * @return array $classes
+   *   Classes for this block.
    */
   public function addBehaviorClass($entity) {
     $classes = array('block-form');

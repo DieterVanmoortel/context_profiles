@@ -2,8 +2,6 @@
 
 namespace Drupal\context_profiles\Form;
 
-use Drupal\context_profiles\ContextProfilesManager;
-use Drupal\Core\Form\FormInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
@@ -27,6 +25,7 @@ class BlockLayoutForm extends BlockFormBase {
 
   /**
    * @var array
+   *  ActiveContexts.
    */
   private $activeContexts;
 
@@ -91,7 +90,7 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Build form.
    *
-   * @param FormInterface $form
+   * @param array $form
    * @param FormStateInterface $form_state
    * @param RouteMatchInterface $route_match
    *
@@ -114,12 +113,6 @@ class BlockLayoutForm extends BlockFormBase {
       '#type' => 'value',
       '#value' => $this->current->id(),
     );
-    // TODO : check user perms?
-    $form['context_profiles_settings'] = array(
-      '#type' => 'link',
-      '#url' => Url::fromRoute('context_profiles.settings'),
-      '#title' => $this->t('Context Profiles Configuration'),
-    );
 
     $this->reaction = $this->current->getReaction('blocks');
 
@@ -138,13 +131,6 @@ class BlockLayoutForm extends BlockFormBase {
     $form['disabled']['block-lookup'] = array(
       '#type' => 'textfield',
       '#placeholder' => 'Find blocks',
-    );
-
-    // TODO : Move this to local action.
-    $form['disabled']['add'] = array(
-      '#type' => 'link',
-      '#url' => Url::fromRoute('block_content.add_page'),
-      '#title' => $this->t('Add new content block'),
     );
 
     $region_list = $this->getContextProfileManager()->getRegions();

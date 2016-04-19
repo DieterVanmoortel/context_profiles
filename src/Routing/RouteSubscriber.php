@@ -35,9 +35,18 @@ class RouteSubscriber extends RouteSubscriberBase {
    * {@inheritdoc}
    */
   protected function alterRoutes(RouteCollection $collection) {
+    $add_block_route = \Drupal::service('router.route_provider')->getRouteByName('block_content.add_page');
+    $admin_route = \Drupal::service('router.route_provider')->getRouteByName('context_profiles.settings');
+
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       if ($route = $this->getContextProfileRoute($entity_type)) {
         $collection->add("entity.$entity_type_id.context_profile", $route);
+        // Direct action link to add new content block.
+        $collection->add("$entity_type_id.block_add", $add_block_route);
+        // Direct action link to the settings page.
+        if (\Drupal::currentUser()->hasPermission('administer context profiles')) {
+            $collection->add("$entity_type_id.admin", $admin_route);
+        }
       }
     }
   }
