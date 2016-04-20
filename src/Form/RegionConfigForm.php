@@ -1,15 +1,12 @@
 <?php
-/**
- * @file
- * Contains \Drupal\context_profiles\Form\RegionConfigForm
- */
 
 namespace Drupal\context_profiles\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\context_profiles\Form\BaseConfigForm;
-use Drupal\context_profiles\ContextProfile;
 
+/**
+ * Defines RegionConfigForm Class.
+ */
 class RegionConfigForm extends BaseConfigForm {
 
   /**
@@ -19,13 +16,16 @@ class RegionConfigForm extends BaseConfigForm {
     return 'context_profiles.config.regions';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $this->buildRolesHeaderForm($form);
 
     $user_roles = $form['user_roles']['#value'];
 
-    // TODO : Implement ContextProfilesManager
+    // TODO : Implement ContextProfilesManager.
     $theme_handler = \Drupal::service('theme_handler');
     $theme_name = $theme_handler->getDefault();
     $theme = $theme_handler->getTheme($theme_name);
@@ -35,7 +35,7 @@ class RegionConfigForm extends BaseConfigForm {
     $default_values = $this->config('context_profiles.settings')
       ->get('roles_regions');
 
-    foreach($regions as $region => $region_name) {
+    foreach ($regions as $region => $region_name) {
       $form['rows'][$region]['description'] = array(
         '#markup' => $region_name,
       );
@@ -67,8 +67,7 @@ class RegionConfigForm extends BaseConfigForm {
   }
 
   /**
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     foreach ($form_state->getValue('user_roles') as $rid => $name) {

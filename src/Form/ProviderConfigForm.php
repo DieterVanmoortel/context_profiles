@@ -1,15 +1,12 @@
 <?php
-/**
- * @file
- * Contains \Drupal\context_profiles\Form\ProviderConfigForm
- */
 
 namespace Drupal\context_profiles\Form;
 
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\context_profiles\Form\BaseConfigForm;
-use Drupal\context_profiles\ContextProfile;
 
+/**
+ * Defines ProviderConfigForm class.
+ */
 class ProviderConfigForm extends BaseConfigForm {
 
   /**
@@ -19,6 +16,9 @@ class ProviderConfigForm extends BaseConfigForm {
     return 'context_profiles.config.regions';
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $this->buildRolesHeaderForm($form);
@@ -29,7 +29,7 @@ class ProviderConfigForm extends BaseConfigForm {
       ->getAvailableBlockDefinitions();
 
     $providers = array();
-    foreach($available_blocks as $block) {
+    foreach ($available_blocks as $block) {
       $provider = $block['provider'];
       if (!isset($providers[$provider])) {
         $providers[$provider] = $provider;
@@ -39,7 +39,7 @@ class ProviderConfigForm extends BaseConfigForm {
     $default_values = $this->config('context_profiles.settings')
       ->get('roles_providers');
 
-    foreach($providers as $provider) {
+    foreach ($providers as $provider) {
       $form['rows'][$provider]['description'] = array(
         '#markup' => $provider,
       );
@@ -53,7 +53,12 @@ class ProviderConfigForm extends BaseConfigForm {
           ),
           '#type' => 'checkbox',
           '#default_value' => isset($default[$provider]),
-          '#attributes' => array('class' => array('rid-' . $rid, 'js-rid-' . $rid)),
+          '#attributes' => array(
+            'class' => array(
+              'rid-' . $rid,
+              'js-rid-' . $rid,
+            ),
+          ),
           '#parents' => array($rid, $provider),
         );
       }
@@ -70,8 +75,7 @@ class ProviderConfigForm extends BaseConfigForm {
   }
 
   /**
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     foreach ($form_state->getValue('user_roles') as $rid => $name) {

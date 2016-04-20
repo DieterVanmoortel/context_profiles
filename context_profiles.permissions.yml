@@ -4,4 +4,4 @@ administer context profiles:
 
 use context profile ui:
   title: Access the context profile ui
-  description: Allow users to acces the context profile ui
+  description: Allow users to access the context profile ui

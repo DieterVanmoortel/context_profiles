@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\devel\Plugin\Derivative\DevelLocalTask.
- */
-
 namespace Drupal\context_profiles\Plugin\Derivative;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
@@ -17,19 +12,19 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides local task definitions for all entity bundles.
  */
-class ContextLocalTask extends DeriverBase implements ContainerDeriverInterface {
+class ContextProfilesLocalTask extends DeriverBase implements ContainerDeriverInterface {
 
   use StringTranslationTrait;
 
   /**
-   * The entity manager
+   * The entity manager.
    *
    * @var \Drupal\Core\Entity\EntityManagerInterface
    */
   protected $entityManager;
 
   /**
-   * Creates an DevelLocalTask object.
+   * Creates an ContextProfilesLocalTask object.
    *
    * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
    *   The entity manager.

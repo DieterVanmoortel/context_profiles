@@ -2,25 +2,24 @@
 
 namespace Drupal\context_profiles;
 
-use Drupal\block\BlockPluginCollection;
-use Drupal\context\ContextReactionInterface;
 use Drupal\context\ContextReactionManager;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Plugin\PluginBase;
 use Drupal\context\ContextManager;
-use Drupal\user\Entity\User;
 
-
+/**
+ * Defines ContextProfilesManager Class.
+ */
 class ContextProfilesManager extends PluginBase {
 
   /**
-   * @var
+   * @var array
    */
   private $providerConfig;
 
   /**
-   * @var
+   * @var array
    */
   private $regionConfig;
 
@@ -42,15 +41,25 @@ class ContextProfilesManager extends PluginBase {
    * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
    */
   function __construct(
-    ThemeHandlerInterface $themeHandler,
-    ContextManager $contextManager,
-    BlockManagerInterface $blockManager,
-    ContextReactionManager $contextReactionManager
+    ThemeHandlerInterface $theme_handler,
+    ContextManager $context_manager,
+    BlockManagerInterface $block_manager,
+    ContextReactionManager $context_reaction_manager
   ) {
-    $this->themeHandler = $themeHandler;
-    $this->contextManager = $contextManager;
-    $this->blockManager = $blockManager;
-    $this->contextReactionManager = $contextReactionManager;
+    $this->themeHandler = $theme_handler;
+    $this->contextManager = $context_manager;
+    $this->blockManager = $block_manager;
+    $this->contextReactionManager = $context_reaction_manager;
+  }
+
+  /**
+   * Returns the current Theme.
+   *
+   * @return Theme
+   *   Current Theme.
+   */
+  private function getTheme() {
+    return $this->themeHandler->getTheme($this->themeHandler->getDefault());
   }
 
   /**
@@ -59,20 +68,17 @@ class ContextProfilesManager extends PluginBase {
    * @param string $type
    *
    * @return ContextReactionInterface
+   *   New instance.
    */
   public function createReactionInstance($type) {
     return $this->contextReactionManager->createInstance($type);
   }
 
   /**
-   * @return theme
-   */
-  private function getTheme() {
-    return $this->themeHandler->getTheme($this->themeHandler->getDefault());
-  }
-
-  /**
    * Get Roles for the current user.
+   *
+   * @return array
+   *   Roles for current user.
    */
   private function getUserRoles() {
     $account = \Drupal::currentUser();
@@ -84,7 +90,9 @@ class ContextProfilesManager extends PluginBase {
    * Return config options for all assigned roles.
    *
    * @param array $config
+   *
    * @return array
+   *   Merged roles.
    */
   private function mergeConfigRoles($config) {
     $roles = $this->getUserRoles();
@@ -100,6 +108,7 @@ class ContextProfilesManager extends PluginBase {
 
   /**
    * @return ProviderConfig
+   *   Provider Configuration.
    */
   public function getProviderConfig() {
     if (!isset($this->providerConfig)) {
@@ -112,6 +121,8 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
+   * Returns the region configuration.
+   *
    * @return array
    */
   private function getRegionConfig() {
@@ -141,8 +152,7 @@ class ContextProfilesManager extends PluginBase {
       $regions[$id]['classes'][] = $id;
     }
 
-    // TODO : Add an alter for other modules
-
+    // TODO : Add an alter for other modules.
     return $regions;
   }
 
@@ -150,8 +160,10 @@ class ContextProfilesManager extends PluginBase {
    * Get all active contexts.
    *
    * @return array
+   *  Active contexts.
    */
   public function getActiveContexts() {
+    $contexts = array();
     $unkeyed_contexts = $this->contextManager->getActiveContexts();
     foreach ($unkeyed_contexts as $context) {
       $contexts[$context->id()] = $context;
@@ -161,9 +173,10 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * Get all block definitions
+   * Get all block definitions.
    *
    * @return array
+   *  Available blocks.
    */
   public function getAvailableBlockDefinitions() {
     // Only add blocks which work without any available context.
@@ -172,8 +185,7 @@ class ContextProfilesManager extends PluginBase {
     // Order by category, and then by admin label.
     $blocks = $this->blockManager->getSortedDefinitions($blocks);
 
-    // TODO : Add an alter for other modules
-
+    // TODO : Add an alter for other modules.
     return $blocks;
   }
 
@@ -183,6 +195,7 @@ class ContextProfilesManager extends PluginBase {
    * @param $entity
    *
    * @return array $classes
+   *   Classes for this block.
    */
   public function addBehaviorClass($entity) {
     $classes = array('block-form');
@@ -210,4 +223,5 @@ class ContextProfilesManager extends PluginBase {
 
     return $classes;
   }
+
 }
