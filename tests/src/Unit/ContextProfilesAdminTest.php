@@ -15,7 +15,7 @@ use Drupal\simpletest\WebTestBase;
  *
  * @group context_profiles
  */
-class ContextProfilesLocalTaskTest extends WebTestBase {
+class ContextProfilesAdminTest extends WebTestBase {
 
   /**
    * The bundle being tested.
@@ -43,52 +43,56 @@ class ContextProfilesLocalTaskTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('context', 'context_profiles', 'node', 'block_content', 'devel');
+  public static $modules = array(
+    'tour',
+    'block_content',
+    'block',
+    'context_profiles',
+    'node'
+  );
 
   /**
    * The profile to install as a basis for testing.
    *
    * @var string
    */
-  protected $profile = 'standard';
+  protected $profile = 'testing';
 
   protected function setUp() {
     parent::setUp();
 
-    // Create a content type.
-    $this->bundle = $this->randomMachineName();
-    $this->contentType = $this->drupalCreateContentType(array('type' => $this->bundle));
-
     // Create a webmaster user.
     $permissions = array(
-      'use context profile ui',
-      'administer nodes',
-      "edit any $this->bundle content",
+      'administer context profiles',
     );
     $this->webmaster = $this->drupalCreateUser($permissions);
   }
 
   /**
-   * Tests that a contextual link is available for context profiles.
+   * Tests that the configuration page is available.
    */
-  public function testLocalTasks() {
-    $this->drupalLogin($this->webmaster);
+  public function testGeneralConfigurationForm() {
+    // Access check for anonymous users.
+    $this->drupalLogin();
+    $this->drupalGet('/admin/structure/context/profiles');
+    $this->assertResponse('403');
 
-    // Create a node.
-    $title = $this->randomString();
-    $node = $this->drupalCreateNode(array('type' => $this->bundle, 'title' => $title));
-    
-    // Check that the context profiles link appears on the node page.
-    $this->drupalGet('node/' . $node->id());
+    // Check access for webmasters.
+    $this->drupalLogin($this->webmaster);
+    $this->drupalGet('/admin/structure/context/profiles');
     $this->assertResponse('200');
+
+    // Check existence of links.
     $this->assertRaw('Blocks');
 
-    // Check access to UI.
-    $this->drupalGet('node/' . $node->id() . '/blocks');
-    $this->assertResponse('200');
+  }
 
-    $this->assertRaw('Active contexts');
-
+  /**
+   * Tests that a contextual link is available for context profiles.
+   */
+  public function testRegionConfigurationForm() {
+    // Check access for webmasters.
+    $this->drupalLogin($this->webmaster);
   }
 
 }
