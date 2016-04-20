@@ -6,6 +6,31 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\ContentEntityType;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+
+/**
+ * Implements hook_help().
+ */
+function context_profiles_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.context_profiles':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>Context Profiles is a UI module for context.
+What makes context profiles different from similar modules is that it does not
+create own entities or add functionality, but simply provides an easy way of
+using context. As a result context profiles can be en/disabled without any
+affects on your application.</p>';
+      $output .= '<p>Currently the main focus of context profiles lays on
+placement of blocks on content entities.</p>';
+      $output .= '<p>Additionally, this module allows you to organise blocks
+placed by different contexts on the same page/entity view.</p>';
+
+      return $output;
+  }
+}
+
 
 /**
  * Implements hook_preprocess_page().
