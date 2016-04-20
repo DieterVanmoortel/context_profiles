@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\context_profiles|ContextProfilesLocalTaskTest.
- */
-
 namespace Drupal\Tests\context_profiles\Unit;
 
 use Drupal\node\Entity\NodeType;
@@ -52,6 +47,9 @@ class ContextProfilesLocalTaskTest extends WebTestBase {
    */
   protected $profile = 'standard';
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
@@ -86,7 +84,6 @@ class ContextProfilesLocalTaskTest extends WebTestBase {
     // Check access to UI.
     $this->drupalGet('node/' . $node->id() . '/blocks');
     $this->assertResponse('200');
-
     $this->assertRaw('Active contexts');
 
   }

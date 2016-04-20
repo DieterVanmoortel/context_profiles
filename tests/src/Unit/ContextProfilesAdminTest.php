@@ -1,13 +1,7 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\context_profiles|ContextProfilesLocalTaskTest.
- */
-
 namespace Drupal\Tests\context_profiles\Unit;
 
-use Drupal\node\Entity\NodeType;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -48,7 +42,7 @@ class ContextProfilesAdminTest extends WebTestBase {
     'block_content',
     'block',
     'context_profiles',
-    'node'
+    'node',
   );
 
   /**
@@ -58,6 +52,9 @@ class ContextProfilesAdminTest extends WebTestBase {
    */
   protected $profile = 'testing';
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
