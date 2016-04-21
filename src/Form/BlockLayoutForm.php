@@ -2,7 +2,6 @@
 
 namespace Drupal\context_profiles\Form;
 
-use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\context\Reaction\Blocks\Form\BlockFormBase;
 use Drupal\context\Entity\Context;
@@ -61,7 +60,7 @@ class BlockLayoutForm extends BlockFormBase {
   private function createActiveContextsForm() {
     $form = array(
       '#type' => 'fieldset',
-      '#title' => t('Active contexts'),
+      '#title' => $this->t('Active contexts'),
     );
     $index = 0;
     foreach ($this->activeContexts as $context) {
@@ -95,7 +94,7 @@ class BlockLayoutForm extends BlockFormBase {
    * @param RouteMatchInterface $route_match
    *
    * @return array
-   *  returns a renderable form.
+   *   returns a renderable form.
    */
   public function buildForm(array $form, FormStateInterface $form_state, RouteMatchInterface $route_match = NULL) {
 
@@ -108,13 +107,14 @@ class BlockLayoutForm extends BlockFormBase {
     if ($triggering_element = $form_state->getTriggeringElement()) {
       $this->current = $this->activeContexts[$triggering_element['#context']];
     }
+    // Reset reaction if needed.
+    $this->reaction = $this->current->getReaction('blocks');
 
+    // Store current context as value.
     $form['current_context'] = array(
       '#type' => 'value',
       '#value' => $this->current->id(),
     );
-
-    $this->reaction = $this->current->getReaction('blocks');
 
     // Start building the form.
     $form['active_contexts'] = $this->createActiveContextsForm();
@@ -125,12 +125,11 @@ class BlockLayoutForm extends BlockFormBase {
     );
     $form['disabled'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Available Blocks'),
+      '#title' => $this->t('Available Blocks'),
     );
-
     $form['disabled']['block-lookup'] = array(
       '#type' => 'textfield',
-      '#placeholder' => 'Find blocks',
+      '#placeholder' => $this->t('Filter by block name'),
     );
 
     $region_list = $this->getContextProfileManager()->getRegions();
@@ -154,14 +153,17 @@ class BlockLayoutForm extends BlockFormBase {
       $blocks = isset($reactions['blocks']['blocks']) ? $reactions['blocks']['blocks'] : array();
 
       foreach ((array) $blocks as $config_block) {
-        $available_blocks[$config_block['id']]['config'] = $config_block;
-        $available_blocks[$config_block['id']]['context'] = $context_id;
-        $available_blocks[$config_block['id']]['active'] = ($context_id == $this->current->id());
-        $available_blocks[$config_block['id']]['context-class'] = 'context-' . $index;
+        $available_blocks[$config_block['id']] += array(
+          'config' => $config_block,
+          'context' => $context_id,
+          'active' => ($context_id == $this->current->id()),
+          'context-class' => 'context-' . $index,
+        );
       }
       $index++;
     }
 
+    // Store blocks as value.
     $form['blocks'] = array(
       '#type' => 'value',
       '#value' => $available_blocks,
@@ -197,8 +199,14 @@ class BlockLayoutForm extends BlockFormBase {
 
       if (isset($entity['config'])) {
         $region = $entity['config']['region'];
+        $block_form['region']['#default_value'] = $region;
+        $block_form['label_display']['#default_value'] = $entity['config']['label_display'];
+
+        if (isset($entity['config']['weight'])) {
+          $block_form['weight']['#default_value'] = $entity['config']['weight'];
+          $form['regions'][$region][$index]['#weight'] = $entity['config']['weight'];
+        }
         $form['regions'][$region][$index][$id] = $block_form;
-        $form['regions'][$region][$index]['#weight'] = $entity['config']['weight'];
       }
       else {
         $form['disabled'][$entity['provider']]['wrap-' . $index][$id] = $block_form;
@@ -206,6 +214,7 @@ class BlockLayoutForm extends BlockFormBase {
       $index++;
     }
 
+    // Form actions traditionally at the bottom.
     $form['actions'] = array('#type' => 'actions');
     $form['actions']['submit'] = array(
       '#type' => 'submit',
@@ -226,7 +235,7 @@ class BlockLayoutForm extends BlockFormBase {
    */
   protected function prepareBlock($entity, $index = 0) {
 
-    // Create new field.
+    // Create new block sub-form.
     $block_form = array(
       '#tree' => TRUE,
       '#type' => 'container',
@@ -270,12 +279,6 @@ class BlockLayoutForm extends BlockFormBase {
       ),
     );
 
-    if (isset($entity['config'])) {
-      $block_form['region']['#default_value'] = $entity['config']['region'];
-      $block_form['weight']['#default_value'] = $entity['config']['weight'];
-      $block_form['label_display']['#default_value'] = $entity['config']['label_display'];
-    }
-
     return $block_form;
   }
 
@@ -291,17 +294,24 @@ class BlockLayoutForm extends BlockFormBase {
     $active_contexts = $form_state->getValue('active_contexts');
     $blocks = $form_state->getValue('blocks');
 
+    // Loop over active contexts, update and save all.
     foreach ($active_contexts as $context_id) {
-      if ($context_id == $current) {
+      $context = Context::load($context_id);
+      if ($context) {
+        // Existing contexts.
+        $reaction = $context->getReaction('blocks');
+      }
+      elseif ($context_id == $current) {
+        // Creating a new context, as it is current.
         $context = $this->current;
         $reaction = $this->reaction;
       }
       else {
-        $context = Context::load($context_id);
-        $reaction = $context->getReaction('blocks');
+        // Not creating a new context, as it is not current.
+        continue;
       }
 
-      // Loop all plugins and add or remove from context.
+      // Loop all plugins and update, add or remove from context.
       foreach ($blocks as $id => $block) {
         $new_block = !isset($block['context']) && $current == $context_id;
         $update_existing_block = isset($block['context']) && $block['context'] == $context_id;
@@ -327,9 +337,9 @@ class BlockLayoutForm extends BlockFormBase {
           }
         }
       }
-
+      // Save every context.
       $context->save();
-    } // end contexts loop
+    }
   }
 
   /**
@@ -341,15 +351,16 @@ class BlockLayoutForm extends BlockFormBase {
    * @return Context
    */
   private function initializeContexts($entity, $type) {
-
+    // Create a unique ID.
     $id = $type . '_profile_' . $entity->id();
 
+    // Try to load existing context, create a new if loading fails.
     $context = Context::load($id);
     if (!$context) {
       $context = Context::create(array(
         'id' => $id,
         'name' => $id,
-        'group' => $type . ' profiles',
+        'group' => ucfirst($type) . ' profiles',
         'label' => 'Profile : ' . $entity->label(),
       ));
 
@@ -362,11 +373,13 @@ class BlockLayoutForm extends BlockFormBase {
       // Save only when form is submitted.
     }
 
-    $this->current = $context;
+    // Create array with active contexts.
     $this->activeContexts[$context->id()] = $context;
-
     $this->activeContexts += $this->getContextProfileManager()
       ->getActiveContexts();
+
+    // Set for future reference.
+    $this->current = $context;
 
     if ($context->hasReaction('blocks')) {
       $this->reaction = $this->current->getReaction('blocks');

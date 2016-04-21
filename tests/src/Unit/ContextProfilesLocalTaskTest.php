@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\context_profiles\Unit;
 
-use Drupal\node\Entity\NodeType;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -38,7 +37,13 @@ class ContextProfilesLocalTaskTest extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array('context', 'context_profiles', 'node', 'block_content', 'devel');
+  public static $modules = array(
+    'context',
+    'context_profiles',
+    'node',
+    'block_content',
+    'devel',
+  );
 
   /**
    * The profile to install as a basis for testing.
@@ -74,8 +79,11 @@ class ContextProfilesLocalTaskTest extends WebTestBase {
 
     // Create a node.
     $title = $this->randomString();
-    $node = $this->drupalCreateNode(array('type' => $this->bundle, 'title' => $title));
-    
+    $node = $this->drupalCreateNode(array(
+      'type' => $this->bundle,
+      'title' => $title
+    ));
+
     // Check that the context profiles link appears on the node page.
     $this->drupalGet('node/' . $node->id());
     $this->assertResponse('200');

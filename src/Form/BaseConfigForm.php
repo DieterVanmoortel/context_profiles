@@ -30,6 +30,7 @@ abstract class BaseConfigForm extends UserPermissionsForm {
    * Build the roles header row form.
    *
    * @param array $form
+   *   renderable form array.
    */
   public function buildRolesHeaderForm(&$form) {
 
