@@ -43,7 +43,7 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Returns ContextProfilesManager Service.
    *
-   * @return $contextProfilesManager
+   * @return ContextProfilesManager
    */
   private function getContextProfilesManager() {
     if (!isset($this->contextProfilesManager)) {
@@ -62,7 +62,7 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Active Context Switcher Form.
    *
-   * @return $form
+   * @return array
    */
   private function createActiveContextsForm() {
     $form = array(
@@ -229,12 +229,11 @@ class BlockLayoutForm extends BlockFormBase {
    * Create a draggable block subform.
    *
    * @param array $entity
-   *  Entity being handled.
+   *   Entity being handled.
    * @param int $index
-   *  Delta of current block.
+   *   Delta of current block.
    *
-   * @return
-   *  array $block_form
+   * @return array
    */
   protected function prepareBlock($entity, $index = 0) {
 

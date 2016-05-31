@@ -2,7 +2,6 @@
 
 namespace Drupal\context_profiles\Form;
 
-use Drupal\context_profiles\ContextProfilesManager;
 use Drupal\user\Form\UserPermissionsForm;
 
 /**
