@@ -2,6 +2,7 @@
 
 namespace Drupal\context_profiles\Form;
 
+use Drupal\context_profiles\ContextProfilesManager;
 use Drupal\user\Form\UserPermissionsForm;
 
 /**
@@ -12,15 +13,15 @@ abstract class BaseConfigForm extends UserPermissionsForm {
   /**
    * ContextProfileManager service.
    *
-   * @var ContextProfileManager
+   * @var ContextProfilesManagerManager
    */
   private $contextProfileManager;
 
   /**
    * Returns the contextProfilesManager object.
    *
-   * @return $contextProfilesManager
-   *  ContextProfileManager service.
+   * @return ContextProfilesManager
+   *    ContextProfilesManager service.
    */
   protected function getContextProfilesManager() {
     if (!isset($this->contextProfileManager)) {
