@@ -34,7 +34,7 @@ class BlockLayoutForm extends BlockFormBase {
   private $activeContexts;
 
   /**
-   * @inheritDoc
+   * Submit button value.
    */
   protected function getSubmitValue() {
     return $this->t('Save Region Configuration');
@@ -43,7 +43,7 @@ class BlockLayoutForm extends BlockFormBase {
   /**
    * Returns ContextProfilesManager Service.
    *
-   * @return \ContextProfilesManager $ContextProfilesManager
+   * @return $contextProfilesManager
    */
   private function getContextProfilesManager() {
     if (!isset($this->contextProfilesManager)) {
@@ -60,9 +60,9 @@ class BlockLayoutForm extends BlockFormBase {
   }
 
   /**
-   * Create a the Acctive Context Switcher Form.
+   * Active Context Switcher Form.
    *
-   * @return array $form
+   * @return $form
    */
   private function createActiveContextsForm() {
     $form = array(
@@ -229,9 +229,12 @@ class BlockLayoutForm extends BlockFormBase {
    * Create a draggable block subform.
    *
    * @param array $entity
+   *  Entity being handled.
    * @param int $index
+   *  Delta of current block.
    *
-   * @return array
+   * @return
+   *  array $block_form
    */
   protected function prepareBlock($entity, $index = 0) {
 
@@ -343,12 +346,12 @@ class BlockLayoutForm extends BlockFormBase {
    * Get or set entity specific context.
    *
    * @param object $entity
-   *  Entity to attach context to.
+   *   Entity to attach context to.
    * @param string $type
-   *  Entity type.
+   *   Entity type.
    *
    * @return /stdClass $context
-   *  Context
+   *   Context
    */
   private function initializeContexts($entity, $type) {
     // Create a unique ID.
