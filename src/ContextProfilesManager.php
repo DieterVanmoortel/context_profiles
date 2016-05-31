@@ -14,33 +14,53 @@ use Drupal\context\ContextManager;
 class ContextProfilesManager extends PluginBase {
 
   /**
+   * Context Profiles Provider Configuration.
+   *
    * @var array
    */
   private $providerConfig;
 
   /**
+   * Context Profiles Region Configuration.
+   *
    * @var array
    */
   private $regionConfig;
 
   /**
+   * ContextReactionManager service.
+   *
    * @var \Drupal\context\ContextReactionManager
    */
   private $contextReactionManager;
 
   /**
+   * Core's Block Manager.
+   *
    * @var \Drupal\Core\Block\BlockManagerInterface
    */
   private $blockManager;
 
   /**
+   * Theme handler service.
+   *
+   * @var \Drupal\Core\Extension\ThemeHandler
+   */
+  private $themeHandler;
+
+  /**
    * ContextProfilesManager constructor.
    *
-   * @param \Drupal\Core\Extension\ThemeHandlerInterface $themeHandler
-   * @param \Drupal\context\ContextManager $contextManager
-   * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
+   * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
+   *    Theme hander interface.
+   * @param \Drupal\context\ContextManager $context_manager
+   *    Context manager object.
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
+   *    Block Manager Interface.
+   * @param ContextReactionManager $context_reaction_manager
+   *    Context Reaction Manager object.
    */
-  function __construct(
+  public function __construct(
     ThemeHandlerInterface $theme_handler,
     ContextManager $context_manager,
     BlockManagerInterface $block_manager,
@@ -55,7 +75,7 @@ class ContextProfilesManager extends PluginBase {
   /**
    * Returns the current Theme.
    *
-   * @return Theme
+   * @return /stdClass Theme
    *   Current Theme.
    */
   private function getTheme() {
@@ -66,8 +86,9 @@ class ContextProfilesManager extends PluginBase {
    * Create new instance of Reaction.
    *
    * @param string $type
+   *   Entity type.
    *
-   * @return ContextReactionInterface
+   * @return /stdClass
    *   New instance.
    */
   public function createReactionInstance($type) {
@@ -90,6 +111,7 @@ class ContextProfilesManager extends PluginBase {
    * Return config options for all assigned roles.
    *
    * @param array $config
+   *    Passed configuration.
    *
    * @return array
    *   Merged roles.
@@ -107,8 +129,9 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * @return ProviderConfig
-   *   Provider Configuration.
+   * Returns the providers configuration.
+   *
+   * @return array
    */
   public function getProviderConfig() {
     if (!isset($this->providerConfig)) {
@@ -121,7 +144,7 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * Returns the region configuration.
+   * Returns the regions configuration.
    *
    * @return array
    */
@@ -160,7 +183,7 @@ class ContextProfilesManager extends PluginBase {
    * Get all active contexts.
    *
    * @return array
-   *  Active contexts.
+   *   Active contexts.
    */
   public function getActiveContexts() {
     $contexts = array();
@@ -176,7 +199,7 @@ class ContextProfilesManager extends PluginBase {
    * Get all block definitions.
    *
    * @return array
-   *  Available blocks.
+   *   Available blocks.
    */
   public function getAvailableBlockDefinitions() {
     // Only add blocks which work without any available context.
@@ -192,7 +215,8 @@ class ContextProfilesManager extends PluginBase {
   /**
    * Check if block is draggable and return array of classes.
    *
-   * @param $entity
+   * @param object $entity
+   *    Entity being processed.
    *
    * @return array $classes
    *   Classes for this block.

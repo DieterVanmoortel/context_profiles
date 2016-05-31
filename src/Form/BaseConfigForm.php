@@ -10,13 +10,17 @@ use Drupal\user\Form\UserPermissionsForm;
 abstract class BaseConfigForm extends UserPermissionsForm {
 
   /**
-   * @var ContextProfilesManager
+   * ContextProfileManager service.
+   *
+   * @var ContextProfilesManagerManager
    */
   private $contextProfileManager;
 
   /**
+   * Returns the contextProfilesManager object.
+   *
    * @return ContextProfilesManager
-   *    returns ContextProfilesManager Object.
+   *    ContextProfilesManager service.
    */
   protected function getContextProfilesManager() {
     if (!isset($this->contextProfileManager)) {
@@ -30,6 +34,7 @@ abstract class BaseConfigForm extends UserPermissionsForm {
    * Build the roles header row form.
    *
    * @param array $form
+   *   Renderable form array.
    */
   public function buildRolesHeaderForm(&$form) {
 
