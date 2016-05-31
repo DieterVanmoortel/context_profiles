@@ -46,7 +46,8 @@ class ContextProfilesManager extends PluginBase {
    *
    * @var \Drupal\Core\Extension\ThemeHandler
    */
-  private $themeHandler
+  private $themeHandler;
+
   /**
    * ContextProfilesManager constructor.
    *
@@ -59,7 +60,7 @@ class ContextProfilesManager extends PluginBase {
    * @param ContextReactionManager $context_reaction_manager
    *    Context Reaction Manager object.
    */
-  function __construct(
+  public function __construct(
     ThemeHandlerInterface $theme_handler,
     ContextManager $context_manager,
     BlockManagerInterface $block_manager,
