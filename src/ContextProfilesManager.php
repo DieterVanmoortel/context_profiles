@@ -14,21 +14,29 @@ use Drupal\context\ContextManager;
 class ContextProfilesManager extends PluginBase {
 
   /**
+   * Context Profiles Provider Configuration.
+   *
    * @var array
    */
   private $providerConfig;
 
   /**
+   * Context Profiles Region Configuration.
+   *
    * @var array
    */
   private $regionConfig;
 
   /**
+   * ContextReactionManager service.
+   *
    * @var \Drupal\context\ContextReactionManager
    */
   private $contextReactionManager;
 
   /**
+   * Core's Block Manager.
+   *
    * @var \Drupal\Core\Block\BlockManagerInterface
    */
   private $blockManager;
@@ -36,9 +44,10 @@ class ContextProfilesManager extends PluginBase {
   /**
    * ContextProfilesManager constructor.
    *
-   * @param \Drupal\Core\Extension\ThemeHandlerInterface $themeHandler
-   * @param \Drupal\context\ContextManager $contextManager
-   * @param \Drupal\Core\Block\BlockManagerInterface $blockManager
+   * @param \Drupal\Core\Extension\ThemeHandlerInterface $theme_handler
+   * @param \Drupal\context\ContextManager $context_manager
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
+   * @param ContextReactionManager $context_reaction_manager
    */
   function __construct(
     ThemeHandlerInterface $theme_handler,
@@ -192,7 +201,7 @@ class ContextProfilesManager extends PluginBase {
   /**
    * Check if block is draggable and return array of classes.
    *
-   * @param $entity
+   * @param \stdClass $entity
    *
    * @return array $classes
    *   Classes for this block.
