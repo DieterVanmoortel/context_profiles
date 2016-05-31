@@ -85,6 +85,7 @@ class ContextProfilesManager extends PluginBase {
    * Create new instance of Reaction.
    *
    * @param string $type
+   *   Entity type.
    *
    * @return /stdClass
    *   New instance.
@@ -109,6 +110,7 @@ class ContextProfilesManager extends PluginBase {
    * Return config options for all assigned roles.
    *
    * @param array $config
+   *    Passed configuration.
    *
    * @return array
    *   Merged roles.
@@ -126,8 +128,9 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * @return ProviderConfig
-   *   Provider Configuration.
+   * Returns the providers configuration.
+   *
+   * @return array
    */
   public function getProviderConfig() {
     if (!isset($this->providerConfig)) {
@@ -140,7 +143,7 @@ class ContextProfilesManager extends PluginBase {
   }
 
   /**
-   * Returns the region configuration.
+   * Returns the regions configuration.
    *
    * @return array
    */
@@ -211,7 +214,8 @@ class ContextProfilesManager extends PluginBase {
   /**
    * Check if block is draggable and return array of classes.
    *
-   * @param stdClass $entity
+   * @param object $entity
+   *    Entity being processed.
    *
    * @return array $classes
    *   Classes for this block.
