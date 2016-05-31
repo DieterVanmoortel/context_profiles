@@ -19,7 +19,7 @@ abstract class BaseConfigForm extends UserPermissionsForm {
   /**
    * Returns the contextProfilesManager object.
    *
-   * @return $ContextProfilesManager
+   * @return $contextProfilesManager
    *  ContextProfileManager service.
    */
   protected function getContextProfilesManager() {
