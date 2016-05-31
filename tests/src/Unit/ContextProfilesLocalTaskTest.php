@@ -81,7 +81,7 @@ class ContextProfilesLocalTaskTest extends WebTestBase {
     $title = $this->randomString();
     $node = $this->drupalCreateNode(array(
       'type' => $this->bundle,
-      'title' => $title
+      'title' => $title,
     ));
 
     // Check that the context profiles link appears on the node page.

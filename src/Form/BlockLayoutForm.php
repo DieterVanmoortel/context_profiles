@@ -13,18 +13,23 @@ use Drupal\Core\Routing\RouteMatchInterface;
 class BlockLayoutForm extends BlockFormBase {
 
   /**
+   * ContextProfilesManager service.
+   *
    * @var ContextProfilesManager
    */
-  private $contextProfileManager;
+  private $contextProfilesManager;
 
   /**
+   * Stores the context currently being editted.
+   *
    * @var Context
    */
   private $current;
 
   /**
+   * List of available contexts.
+   *
    * @var array
-   *  ActiveContexts.
    */
   private $activeContexts;
 
@@ -36,13 +41,15 @@ class BlockLayoutForm extends BlockFormBase {
   }
 
   /**
-   * @return ContextProfilesManager
+   * Returns ContextProfilesManager Service.
+   *
+   * @return \ContextProfilesManager $ContextProfilesManager
    */
-  private function getContextProfileManager() {
-    if (!isset($this->contextProfileManager)) {
-      $this->contextProfileManager = \Drupal::service('context_profiles.manager');
+  private function getContextProfilesManager() {
+    if (!isset($this->contextProfilesManager)) {
+      $this->contextProfilesManager = \Drupal::service('context_profiles.manager');
     }
-    return $this->contextProfileManager;
+    return $this->contextProfilesManager;
   }
 
   /**
@@ -87,14 +94,7 @@ class BlockLayoutForm extends BlockFormBase {
 
 
   /**
-   * Build form.
-   *
-   * @param array $form
-   * @param FormStateInterface $form_state
-   * @param RouteMatchInterface $route_match
-   *
-   * @return array
-   *   returns a renderable form.
+   * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, RouteMatchInterface $route_match = NULL) {
 
@@ -132,7 +132,7 @@ class BlockLayoutForm extends BlockFormBase {
       '#placeholder' => $this->t('Filter by block name'),
     );
 
-    $region_list = $this->getContextProfileManager()->getRegions();
+    $region_list = $this->getContextProfilesManager()->getRegions();
     foreach ($region_list as $region_id => $region) {
       $form['regions'][$region_id] = array(
         '#type' => 'fieldset',
@@ -144,7 +144,7 @@ class BlockLayoutForm extends BlockFormBase {
       );
     }
 
-    $available_blocks = $this->getContextProfileManager()
+    $available_blocks = $this->getContextProfilesManager()
       ->getAvailableBlockDefinitions();
 
     $index = 0;
@@ -169,7 +169,7 @@ class BlockLayoutForm extends BlockFormBase {
       '#value' => $available_blocks,
     );
 
-    $provider_config = $this->getContextProfileManager()->getProviderConfig();
+    $provider_config = $this->getContextProfilesManager()->getProviderConfig();
 
     $index = 0;
     foreach ($available_blocks as $id => $entity) {
@@ -240,7 +240,7 @@ class BlockLayoutForm extends BlockFormBase {
       '#tree' => TRUE,
       '#type' => 'container',
       '#attributes' => array(
-        'class' => $this->getContextProfileManager()
+        'class' => $this->getContextProfilesManager()
           ->addBehaviorClass($entity),
         'plugin' => $index,
       ),
@@ -284,10 +284,7 @@ class BlockLayoutForm extends BlockFormBase {
 
 
   /**
-   * Form Submission handler.
-   *
-   * @param array $form
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $current = $form_state->getValue('current_context');
@@ -346,9 +343,12 @@ class BlockLayoutForm extends BlockFormBase {
    * Get or set entity specific context.
    *
    * @param object $entity
+   *  Entity to attach context to.
    * @param string $type
+   *  Entity type.
    *
-   * @return Context
+   * @return /stdClass $context
+   *  Context
    */
   private function initializeContexts($entity, $type) {
     // Create a unique ID.
@@ -375,7 +375,7 @@ class BlockLayoutForm extends BlockFormBase {
 
     // Create array with active contexts.
     $this->activeContexts[$context->id()] = $context;
-    $this->activeContexts += $this->getContextProfileManager()
+    $this->activeContexts += $this->getContextProfilesManager()
       ->getActiveContexts();
 
     // Set for future reference.
@@ -385,7 +385,7 @@ class BlockLayoutForm extends BlockFormBase {
       $this->reaction = $this->current->getReaction('blocks');
     }
     else {
-      $this->reaction = $this->getContextProfileManager()
+      $this->reaction = $this->getContextProfilesManager()
         ->createReactionInstance('blocks');
       $this->current->addReaction($this->reaction->getConfiguration());
     }
