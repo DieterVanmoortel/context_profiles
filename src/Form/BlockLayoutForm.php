@@ -44,12 +44,10 @@ class BlockLayoutForm extends BlockFormBase {
    * Returns ContextProfilesManager Service.
    *
    * @return ContextProfilesManager
+   *  returns a ContextProfilesManager object
    */
-  private function getContextProfilesManager() {
-    if (!isset($this->contextProfilesManager)) {
-      $this->contextProfilesManager = \Drupal::service('context_profiles.manager');
-    }
-    return $this->contextProfilesManager;
+  protected function getContextProfilesManager() {
+    return $this->contextProfilesManager = \Drupal::service('context_profiles.manager');
   }
 
   /**
@@ -63,6 +61,7 @@ class BlockLayoutForm extends BlockFormBase {
    * Active Context Switcher Form.
    *
    * @return array
+   *  array with active contexts.
    */
   private function createActiveContextsForm() {
     $form = array(
@@ -92,12 +91,10 @@ class BlockLayoutForm extends BlockFormBase {
     return $form;
   }
 
-
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, RouteMatchInterface $route_match = NULL) {
-
     $entity_type = $route_match->getRouteObject()
       ->getOption('_context_profiles_entity_type_id');
     $entity = $route_match->getParameter($entity_type);
@@ -234,9 +231,9 @@ class BlockLayoutForm extends BlockFormBase {
    *   Delta of current block.
    *
    * @return array
+   *  renderable form array.
    */
   protected function prepareBlock($entity, $index = 0) {
-
     // Create new block sub-form.
     $block_form = array(
       '#tree' => TRUE,
@@ -283,7 +280,6 @@ class BlockLayoutForm extends BlockFormBase {
 
     return $block_form;
   }
-
 
   /**
    * {@inheritdoc}
@@ -349,7 +345,7 @@ class BlockLayoutForm extends BlockFormBase {
    * @param string $type
    *   Entity type.
    *
-   * @return /stdClass $context
+   * @return object
    *   Context
    */
   private function initializeContexts($entity, $type) {
