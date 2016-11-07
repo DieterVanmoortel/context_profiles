@@ -75,7 +75,7 @@ class ContextProfilesManager extends PluginBase {
   /**
    * Returns the current Theme.
    *
-   * @return /stdClass Theme
+   * @return object
    *   Current Theme.
    */
   private function getTheme() {
@@ -88,8 +88,8 @@ class ContextProfilesManager extends PluginBase {
    * @param string $type
    *   Entity type.
    *
-   * @return /stdClass
-   *   New instance.
+   * @return object
+   *   New reaction instance.
    */
   public function createReactionInstance($type) {
     return $this->contextReactionManager->createInstance($type);
@@ -132,6 +132,7 @@ class ContextProfilesManager extends PluginBase {
    * Returns the providers configuration.
    *
    * @return array
+   *  Provider config
    */
   public function getProviderConfig() {
     if (!isset($this->providerConfig)) {
@@ -147,6 +148,7 @@ class ContextProfilesManager extends PluginBase {
    * Returns the regions configuration.
    *
    * @return array
+   *  Region config
    */
   private function getRegionConfig() {
     if (!isset($this->regionConfig)) {
@@ -162,6 +164,7 @@ class ContextProfilesManager extends PluginBase {
    * Return all regions, based on config.
    *
    * @return array
+   *  Regions based on config
    */
   public function getRegions() {
     $regions = array();
@@ -175,7 +178,6 @@ class ContextProfilesManager extends PluginBase {
       $regions[$id]['classes'][] = $id;
     }
 
-    // TODO : Add an alter for other modules.
     return $regions;
   }
 
@@ -208,7 +210,6 @@ class ContextProfilesManager extends PluginBase {
     // Order by category, and then by admin label.
     $blocks = $this->blockManager->getSortedDefinitions($blocks);
 
-    // TODO : Add an alter for other modules.
     return $blocks;
   }
 
@@ -218,7 +219,7 @@ class ContextProfilesManager extends PluginBase {
    * @param object $entity
    *    Entity being processed.
    *
-   * @return array $classes
+   * @return array
    *   Classes for this block.
    */
   public function addBehaviorClass($entity) {
